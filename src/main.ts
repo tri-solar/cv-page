@@ -16,6 +16,12 @@ const textureLoader = new THREE.TextureLoader()
 const uranusColor = textureLoader.load('/textures/uranus-color-tuned.webp')
 uranusColor.colorSpace = THREE.SRGBColorSpace
 
+const particleTextures = [
+    textureLoader.load('/textures/particles/star1.png'),
+    textureLoader.load('/textures/particles/star2.png'),
+    textureLoader.load('/textures/particles/star3.png')
+]
+
 /**
  * Geometry & Material
  */
@@ -33,8 +39,8 @@ scene.add(uranus)
 /**
  * Uranus Rings
  */
-const innerRadius = 1.5
-const outerRadius = 2.5
+const innerRadius = 1.25
+const outerRadius = 3
 const ringSegments = 128
 
 const ringGeometry = new THREE.RingGeometry(innerRadius, outerRadius, ringSegments)
@@ -69,9 +75,76 @@ const ringMaterial = new THREE.MeshStandardMaterial({
 const uranusRing = new THREE.Mesh(ringGeometry, ringMaterial)
 uranusRing.name = "Uranus's Rings"
 uranusRing.rotation.x = Math.PI / 2.7
-uranusRing.castShadow = true
+uranusRing.rotation.y = 0.15
+uranusRing.castShadow = false
 uranusRing.receiveShadow = false
 scene.add(uranusRing)
+
+/**
+ * Particles
+ */
+const totalParticles = 10000
+const particlesPerTexture = Math.floor(totalParticles / particleTextures.length)
+const excludeRadius = 7
+
+particleTextures.forEach(texture => {
+    const particlesGeometry = new THREE.BufferGeometry()
+    const count = particlesPerTexture
+    
+    const positions = new Float32Array(count * 3)
+    const colors = new Float32Array(count * 3)
+    
+    for(let i = 0; i < count; i++)
+    {
+        let x, y, z
+        let inExcludeZone = true
+        
+        while(inExcludeZone)
+        {
+            x = (Math.random() - 0.5) * 15
+            y = (Math.random() - 0.5) * 15
+            z = (Math.random() - 0.5) * 15
+            
+            const distance = Math.sqrt(x * x + y * y + z * z)
+            if(distance > excludeRadius)
+            {
+                inExcludeZone = false
+            }
+        }
+        
+        positions[i * 3] = x
+        positions[i * 3 + 1] = y
+        positions[i * 3 + 2] = z
+        
+        colors[i * 3] = 0.2 + Math.random() * 0.8      // Red
+        colors[i * 3 + 1] = 0.2 + Math.random() * 0.5  // Green
+        colors[i * 3 + 2] = 0.8 + Math.random() * 0.2  // Blue
+    }
+    
+    particlesGeometry.setAttribute(
+        'position',
+        new THREE.BufferAttribute(positions, 3)
+    )
+    
+    particlesGeometry.setAttribute(
+        'color',
+        new THREE.BufferAttribute(colors, 3)
+    )
+    
+    const particlesMaterial = new THREE.PointsMaterial({
+        color: '#ffffff',
+        size: 0.1,
+        sizeAttenuation: true,
+        transparent: true,
+        alphaMap: texture,
+        depthWrite: false,
+        vertexColors: true,
+        alphaTest: 0.001
+    })
+    
+    const particles = new THREE.Points(particlesGeometry, particlesMaterial)
+    scene.add(particles)
+})
 
 /**
  * Lights
@@ -125,7 +198,7 @@ scene.add(camera)
 /**
  * Renderer
  */
-const renderer = new THREE.WebGLRenderer({ canvas })
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.shadowMap.enabled = true
@@ -143,10 +216,31 @@ const helpersFolder = gui.addFolder('Helpers')
 helpersFolder.add(directionalLightHelper, 'visible').name('Directional Helper')
 helpersFolder.add(gridHelper, 'visible').name('Grid Helper')
 
+const ringFolder = gui.addFolder('Ring')
+ringFolder.add(uranusRing.rotation, 'x', 0, Math.PI * 2, 0.01).name('Rotation X')
+ringFolder.add(uranusRing.rotation, 'y', 0, Math.PI * 2, 0.01).name('Rotation Y')
+ringFolder.add(uranusRing.rotation, 'z', 0, Math.PI * 2, 0.01).name('Rotation Z')
+
+/**
+ * Camera Zoom on Scroll
+ */
+const initialCameraX = 6
+const initialCameraY = 2
+const initialCameraZ = 0
+
 /**
  * Animate
  */
 const tick = () => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
+    const scrollHeight = document.body.scrollHeight - window.innerHeight
+    const scrollProgress = scrollHeight > 0 ? scrollY / scrollHeight : 0
+    
+    camera.position.x = initialCameraX - scrollProgress * 4
+    camera.position.y = initialCameraY - scrollProgress * 1.35
+    camera.position.z = initialCameraZ
+    camera.lookAt(0, 0, 0)
+    
     renderer.render(scene, camera)
     window.requestAnimationFrame(tick)
 }
