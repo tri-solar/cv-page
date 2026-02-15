@@ -17,6 +17,11 @@ html {
     scroll-snap-type: y mandatory;
 }
 
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
 body {
     overflow-y: scroll;
     height: 100vh;
@@ -62,6 +67,12 @@ section
 {
     top: 33%;
     left: 10%;
+}
+
+.link-icon {
+    color: #c0c0c0;
+    filter: brightness(0) invert(1) opacity(0.7);
+    pointer-events: all !important;
 }
 
 .content
@@ -136,7 +147,7 @@ section
 }
 
 .card-icon {
-    color: #42DAED; /* Your cyan color */
+    color: #42DAED;
     filter: brightness(0) saturate(100%) invert(1) sepia(1) saturate(10000%) hue-rotate(180deg);
 }
 
@@ -154,7 +165,7 @@ section
 }
 
 .card-text{
-    color: #c0c0c0;;
+    color: #c0c0c0;
     font-family: 'Monaco', 'Menlo', monospace;
     font-size: 0.8rem;
     margin-left: 5px;
