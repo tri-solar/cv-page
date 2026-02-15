@@ -117,6 +117,9 @@ section
 {
     top: 20%;
     right: 7.5%;
+    background: rgba(0, 0, 0, 0.33);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
 }
 
 .subheader 
@@ -153,7 +156,7 @@ section
 
 .skill-card {
     display: flex;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(66, 218, 237, 0.5);
     border-radius: 8px;
     padding: 5px;

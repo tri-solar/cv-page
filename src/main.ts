@@ -152,7 +152,7 @@ particleTextures.forEach(texture => {
 const ambientLight = new THREE.AmbientLight('#ffffff', 0.01)
 scene.add(ambientLight)
 
-const directionalLight = new THREE.DirectionalLight('#d7f4ff', 1.5)
+const directionalLight = new THREE.DirectionalLight('#d7f4ff', 4)
 directionalLight.position.set(5, 5, 5)
 directionalLight.castShadow = true
 scene.add(directionalLight)
@@ -210,7 +210,7 @@ const gui = new GUI()
 
 const lightsFolder = gui.addFolder('Lights')
 lightsFolder.add(ambientLight, 'intensity', 0, 1, 0.01).name('Ambient Light')
-lightsFolder.add(directionalLight, 'intensity', 0, 2, 0.01).name('Directional Light')
+lightsFolder.add(directionalLight, 'intensity', 0, 10, 0.01).name('Directional Light')
 
 const helpersFolder = gui.addFolder('Helpers')
 helpersFolder.add(directionalLightHelper, 'visible').name('Directional Helper')
