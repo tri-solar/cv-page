@@ -1,0 +1,78 @@
+/* Arrow Animation and Styling */
+
+@-webkit-keyframes shake-vertical {
+  0%,
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  10%,
+  30%,
+  50%,
+  70% {
+    -webkit-transform: translateY(-4px);
+            transform: translateY(-4px);
+  }
+  20%,
+  40%,
+  60% {
+    -webkit-transform: translateY(4px);
+            transform: translateY(4px);
+  }
+  80% {
+    -webkit-transform: translateY(3.2px);
+            transform: translateY(3.2px);
+  }
+  90% {
+    -webkit-transform: translateY(-3.2px);
+            transform: translateY(-3.2px);
+  }
+}
+
+@keyframes shake-vertical {
+  0%,
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  10%,
+  30%,
+  50%,
+  70% {
+    -webkit-transform: translateY(-4px);
+            transform: translateY(-4px);
+  }
+  20%,
+  40%,
+  60% {
+    -webkit-transform: translateY(4px);
+            transform: translateY(4px);
+  }
+  80% {
+    -webkit-transform: translateY(3.2px);
+            transform: translateY(3.2px);
+  }
+  90% {
+    -webkit-transform: translateY(-3.2px);
+            transform: translateY(-3.2px);
+  }
+}
+
+.down-arrow
+{
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: none;
+    border: none;
+    color: #42DAED;
+    cursor: pointer;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    -webkit-animation: shake-vertical 8s infinite;
+            animation: shake-vertical 8s infinite;
+}

@@ -1,7 +1,10 @@
+@import './arrow.css';
+
 *
 {
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 html,
@@ -10,10 +13,149 @@ body
     overflow: hidden;
 }
 
+html {
+    scroll-snap-type: y mandatory;
+}
+
+body {
+    overflow-y: scroll;
+    height: 100vh;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
 .webgl
 {
     position: fixed;
     top: 0;
     left: 0;
     outline: none;
+}
+
+.sections-wrapper
+{
+    position: relative;
+    z-index: 5;
+}
+
+section
+{
+    height: 100vh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.hero
+{
+    background: transparent;
+}
+
+.left
+{
+    top: 33%;
+    left: 10%;
+}
+
+.content
+{
+    position: absolute;
+    width: 30%;
+    padding: 40px;
+    color: #e0e0e0;
+    font-family: 'Monaco', 'Menlo', monospace;
+    pointer-events: none;
+}
+
+.content h1
+{
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #42DAED;
+}
+
+.content p
+{
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #c0c0c0;
+}
+
+.content .with-icon
+{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.content .icon
+{
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.right
+{
+    top: 20%;
+    right: 5%;
+}
+
+.subheader 
+{
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #42DAED;
+    margin-bottom: 20px;
+}
+
+.about {
+    font-size: 10px;
+    line-height: 1;
+}
+
+.stack {
+    display: flex;
+}
+
+.large-left {
+    top: 50%;
+    left: 10%;
+    width: 45% !important;
+}
+
+.category {
+    margin-right: 20px;
+}
+
+.card-icon {
+    color: #42DAED; /* Your cyan color */
+    filter: brightness(0) saturate(100%) invert(1) sepia(1) saturate(10000%) hue-rotate(180deg);
+}
+
+.skill-card {
+    display: flex;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(66, 218, 237, 0.5);
+    border-radius: 8px;
+    padding: 5px;
+    margin: 10px;
+    text-align: center;
+    align-items: center;
+    margin-left: 0;
+    width: fit-content;
+}
+
+.card-text{
+    color: #c0c0c0;;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.8rem;
+    margin-left: 5px;
 }
