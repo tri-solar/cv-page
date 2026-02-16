@@ -31,9 +31,8 @@ let uranus: THREE.Group
 let gui: GUI
 
 const gltfLoader = new GLTFLoader()
-gltfLoader.load('/models/uranus-cut.glb', (gltf) => {
+gltfLoader.load('/models/uranus.glb', (gltf) => {
     uranus = gltf.scene
-    uranus.scale.multiplyScalar(1/3)
     uranus.castShadow = true
      uranus.receiveShadow = true
     uranus.traverse((child) => {
@@ -44,7 +43,6 @@ gltfLoader.load('/models/uranus-cut.glb', (gltf) => {
     })
     scene.add(uranus)
     
-    // Add Uranus rotation to GUI if gui exists
     if (gui) {
         const uranusFolder = gui.addFolder('Uranus')
         uranusFolder.add(uranus.rotation, 'x', 0, Math.PI * 2, 0.01).name('Rotation X')
@@ -93,8 +91,8 @@ const uranusRing = new THREE.Mesh(ringGeometry, ringMaterial)
 uranusRing.name = "Uranus's Rings"
 uranusRing.rotation.x = 1.49
 uranusRing.rotation.y = 3.19
-uranusRing.castShadow = false
-uranusRing.receiveShadow = false
+uranusRing.castShadow = true
+uranusRing.receiveShadow = true
 scene.add(uranusRing)
 
 /**
@@ -252,7 +250,7 @@ const ambientLight = new THREE.AmbientLight('#ffffff', 0.01)
 scene.add(ambientLight)
 
 const directionalLight = new THREE.DirectionalLight('#d7f4ff', 4)
-directionalLight.position.set(10, 10, -10)
+directionalLight.position.set(3, 10, -10)
 directionalLight.castShadow = true
 directionalLight.shadow.mapSize.width = 2048
 directionalLight.shadow.mapSize.height = 2048
