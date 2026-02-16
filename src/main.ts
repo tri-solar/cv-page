@@ -86,6 +86,7 @@ scene.add(uranusRing)
 const totalParticles = 10000
 const particlesPerTexture = Math.floor(totalParticles / particleTextures.length)
 const excludeRadius = 7
+const particlesMeshes: THREE.Points[] = []
 
 particleTextures.forEach(texture => {
     const particlesGeometry = new THREE.BufferGeometry()
@@ -93,6 +94,7 @@ particleTextures.forEach(texture => {
     
     const positions = new Float32Array(count * 3)
     const colors = new Float32Array(count * 3)
+    const sizes = new Float32Array(count)
     
     for(let i = 0; i < count; i++)
     {
@@ -116,9 +118,11 @@ particleTextures.forEach(texture => {
         positions[i * 3 + 1] = y
         positions[i * 3 + 2] = z
         
-        colors[i * 3] = 0.2 + Math.random() * 0.8      // Red
-        colors[i * 3 + 1] = 0.2 + Math.random() * 0.5  // Green
-        colors[i * 3 + 2] = 0.8 + Math.random() * 0.2  // Blue
+        colors[i * 3] = 0.85 + Math.random() * 0.15     // Red
+        colors[i * 3 + 1] = 0.95 + Math.random() * 0.05  // Green
+        colors[i * 3 + 2] = 0.95 + Math.random() * 0.05  // Blue
+        
+        sizes[i] = 0.05 + Math.random() * 0.1
     }
     
     particlesGeometry.setAttribute(
@@ -129,6 +133,11 @@ particleTextures.forEach(texture => {
     particlesGeometry.setAttribute(
         'color',
         new THREE.BufferAttribute(colors, 3)
+    )
+    
+    particlesGeometry.setAttribute(
+        'size',
+        new THREE.BufferAttribute(sizes, 1)
     )
     
     const particlesMaterial = new THREE.PointsMaterial({
@@ -144,6 +153,7 @@ particleTextures.forEach(texture => {
     
     const particles = new THREE.Points(particlesGeometry, particlesMaterial)
     scene.add(particles)
+    particlesMeshes.push(particles)
 })
 
 /**
@@ -240,6 +250,11 @@ const tick = () => {
     camera.position.y = initialCameraY - scrollProgress * 1.35
     camera.position.z = initialCameraZ
     camera.lookAt(0, 0, 0)
+    
+    // Rotate particles to the left
+    particlesMeshes.forEach(particles => {
+        particles.rotation.y -= 0.0001
+    })
     
     renderer.render(scene, camera)
     window.requestAnimationFrame(tick)
