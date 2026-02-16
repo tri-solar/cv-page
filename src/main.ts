@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import GUI from 'lil-gui'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { initScrollSnap } from './scrollSnap'
 
 /**
@@ -26,16 +27,31 @@ const particleTextures = [
 /**
  * Geometry & Material
  */
-const urnausGeometry = new THREE.SphereGeometry(1, 64, 32)
-const uranusMaterial = new THREE.MeshStandardMaterial({
-    map: uranusColor,
-    metalness: 0.1,
-    roughness: 0.8
+let uranus: THREE.Group
+let gui: GUI
+
+const gltfLoader = new GLTFLoader()
+gltfLoader.load('/models/uranus-cut.glb', (gltf) => {
+    uranus = gltf.scene
+    uranus.scale.multiplyScalar(1/3)
+    uranus.castShadow = true
+     uranus.receiveShadow = true
+    uranus.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+            child.castShadow = true
+             child.receiveShadow = true
+        }
+    })
+    scene.add(uranus)
+    
+    // Add Uranus rotation to GUI if gui exists
+    if (gui) {
+        const uranusFolder = gui.addFolder('Uranus')
+        uranusFolder.add(uranus.rotation, 'x', 0, Math.PI * 2, 0.01).name('Rotation X')
+        uranusFolder.add(uranus.rotation, 'y', 0, Math.PI * 2, 0.01).name('Rotation Y')
+        uranusFolder.add(uranus.rotation, 'z', 0, Math.PI * 2, 0.01).name('Rotation Z')
+    }
 })
-const uranus = new THREE.Mesh(urnausGeometry, uranusMaterial)
-uranus.castShadow = true
-uranus.receiveShadow = true
-scene.add(uranus)
 
 /**
  * Uranus Rings
@@ -236,8 +252,12 @@ const ambientLight = new THREE.AmbientLight('#ffffff', 0.01)
 scene.add(ambientLight)
 
 const directionalLight = new THREE.DirectionalLight('#d7f4ff', 4)
-directionalLight.position.set(5, 5, 5)
+directionalLight.position.set(10, 10, -10)
 directionalLight.castShadow = true
+directionalLight.shadow.mapSize.width = 2048
+directionalLight.shadow.mapSize.height = 2048
+directionalLight.shadow.bias = -0.0001
+directionalLight.shadow.normalBias = 0.02
 scene.add(directionalLight)
 
 /**
@@ -289,11 +309,14 @@ renderer.shadowMap.enabled = true
 /**
  * GUI
  */
-const gui = new GUI()
+gui = new GUI()
 
 const lightsFolder = gui.addFolder('Lights')
 lightsFolder.add(ambientLight, 'intensity', 0, 1, 0.01).name('Ambient Light')
 lightsFolder.add(directionalLight, 'intensity', 0, 10, 0.01).name('Directional Light')
+lightsFolder.add(directionalLight.position, 'x', -10, 10, 0.1).name('Dir Light X')
+lightsFolder.add(directionalLight.position, 'y', -10, 10, 0.1).name('Dir Light Y')
+lightsFolder.add(directionalLight.position, 'z', -10, 10, 0.1).name('Dir Light Z')
 
 const helpersFolder = gui.addFolder('Helpers')
 helpersFolder.add(directionalLightHelper, 'visible').name('Directional Helper')
@@ -340,6 +363,11 @@ const tick = () => {
     const lookAtY = 0 + (endCameraSettings.lookAtY - 0) * scrollProgress
     const lookAtZ = 0 + (endCameraSettings.lookAtZ - 0) * scrollProgress
     camera.lookAt(lookAtX, lookAtY, lookAtZ)
+    
+    // Animate Uranus rotation
+    if (uranus) {
+        uranus.rotation.y = 3 + (0 - 3) * scrollProgress
+    }
     
     // Rotate particles to the left
     particlesMeshes.forEach(particles => {
