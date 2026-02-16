@@ -74,8 +74,8 @@ const ringMaterial = new THREE.MeshStandardMaterial({
 
 const uranusRing = new THREE.Mesh(ringGeometry, ringMaterial)
 uranusRing.name = "Uranus's Rings"
-uranusRing.rotation.x = Math.PI / 2.7
-uranusRing.rotation.y = 0.15
+uranusRing.rotation.x = 1.49
+uranusRing.rotation.y = 3.19
 uranusRing.castShadow = false
 uranusRing.receiveShadow = false
 scene.add(uranusRing)
@@ -157,6 +157,78 @@ particleTextures.forEach(texture => {
 })
 
 /**
+ * Static Particles (Further Out)
+ */
+const staticParticlesCount = 5000
+
+particleTextures.forEach(texture => {
+    const staticGeometry = new THREE.BufferGeometry()
+    const count = Math.floor(staticParticlesCount / particleTextures.length)
+    
+    const positions = new Float32Array(count * 3)
+    const colors = new Float32Array(count * 3)
+    const sizes = new Float32Array(count)
+    
+    for(let i = 0; i < count; i++)
+    {
+        let x, y, z
+        let inValidZone = false
+        
+        while(!inValidZone)
+        {
+            x = (Math.random() - 0.5) * 40
+            y = (Math.random() - 0.5) * 40
+            z = (Math.random() - 0.5) * 40
+            
+            const distance = Math.sqrt(x * x + y * y + z * z)
+            if(distance > 10)
+            {
+                inValidZone = true
+            }
+        }
+        
+        positions[i * 3] = x
+        positions[i * 3 + 1] = y
+        positions[i * 3 + 2] = z
+        
+        colors[i * 3] = 0.85 + Math.random() * 0.15     // Red
+        colors[i * 3 + 1] = 0.95 + Math.random() * 0.05  // Green
+        colors[i * 3 + 2] = 0.95 + Math.random() * 0.05  // Blue
+        
+        sizes[i] = 0.1 + Math.random() * 0.15
+    }
+    
+    staticGeometry.setAttribute(
+        'position',
+        new THREE.BufferAttribute(positions, 3)
+    )
+    
+    staticGeometry.setAttribute(
+        'color',
+        new THREE.BufferAttribute(colors, 3)
+    )
+    
+    staticGeometry.setAttribute(
+        'size',
+        new THREE.BufferAttribute(sizes, 1)
+    )
+    
+    const staticMaterial = new THREE.PointsMaterial({
+        color: '#ffffff',
+        size: 0.1,
+        sizeAttenuation: true,
+        transparent: true,
+        alphaMap: texture,
+        depthWrite: false,
+        vertexColors: true,
+        alphaTest: 0.001
+    })
+    
+    const staticParticles = new THREE.Points(staticGeometry, staticMaterial)
+    scene.add(staticParticles)
+})
+
+/**
  * Lights
  */
 const ambientLight = new THREE.AmbientLight('#ffffff', 0.01)
@@ -198,7 +270,7 @@ window.addEventListener('resize', () => {
 /**
  * Camera
  */
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000)
 camera.position.z = 0
 camera.position.y = 1
 camera.position.x = 6
@@ -235,6 +307,15 @@ const animationSettings = { animSpeed: 0.0001 }
 const animationFolder = gui.addFolder('Animation')
 animationFolder.add(animationSettings, 'animSpeed', 0, 0.001, 0.00001).name('Particles Speed')
 
+const endCameraSettings = { x: 2.1, y: 0.9, z: -0.09, lookAtX: -1.6, lookAtY: -0.09, lookAtZ: -2 }
+const cameraFolder = gui.addFolder('End Camera')
+cameraFolder.add(endCameraSettings, 'x', -10, 10, 0.1).name('Position X')
+cameraFolder.add(endCameraSettings, 'y', -10, 10, 0.1).name('Position Y')
+cameraFolder.add(endCameraSettings, 'z', -10, 10, 0.1).name('Position Z')
+cameraFolder.add(endCameraSettings, 'lookAtX', -10, 10, 0.1).name('LookAt X')
+cameraFolder.add(endCameraSettings, 'lookAtY', -10, 10, 0.1).name('LookAt Y')
+cameraFolder.add(endCameraSettings, 'lookAtZ', -10, 10, 0.1).name('LookAt Z')
+
 /**
  * Camera Zoom on Scroll
  */
@@ -250,10 +331,14 @@ const tick = () => {
     const scrollHeight = document.body.scrollHeight - window.innerHeight
     const scrollProgress = scrollHeight > 0 ? scrollY / scrollHeight : 0
     
-    camera.position.x = initialCameraX - scrollProgress * 4
-    camera.position.y = initialCameraY - scrollProgress * 1.35
-    camera.position.z = initialCameraZ
-    camera.lookAt(0, 0, 0)
+    camera.position.x = initialCameraX + (endCameraSettings.x - initialCameraX) * scrollProgress
+    camera.position.y = initialCameraY + (endCameraSettings.y - initialCameraY) * scrollProgress
+    camera.position.z = initialCameraZ + (endCameraSettings.z - initialCameraZ) * scrollProgress
+    
+    const lookAtX = 0 + (endCameraSettings.lookAtX - 0) * scrollProgress
+    const lookAtY = 0 + (endCameraSettings.lookAtY - 0) * scrollProgress
+    const lookAtZ = 0 + (endCameraSettings.lookAtZ - 0) * scrollProgress
+    camera.lookAt(lookAtX, lookAtY, lookAtZ)
     
     // Rotate particles to the left
     particlesMeshes.forEach(particles => {

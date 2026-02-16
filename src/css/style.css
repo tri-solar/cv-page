@@ -131,12 +131,13 @@ section {
 
 .stack {
     display: flex;
+    width: fit-content;
 }
 
 .large-left {
-    top: 50%;
-    left: 7.5%;
-    width: 45% !important;
+    top: 55%;
+    right: 7.5%;
+    width: fit-content !important;
 }
 
 .category {
