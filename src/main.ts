@@ -231,6 +231,10 @@ ringFolder.add(uranusRing.rotation, 'x', 0, Math.PI * 2, 0.01).name('Rotation X'
 ringFolder.add(uranusRing.rotation, 'y', 0, Math.PI * 2, 0.01).name('Rotation Y')
 ringFolder.add(uranusRing.rotation, 'z', 0, Math.PI * 2, 0.01).name('Rotation Z')
 
+const animationSettings = { animSpeed: 0.0001 }
+const animationFolder = gui.addFolder('Animation')
+animationFolder.add(animationSettings, 'animSpeed', 0, 0.001, 0.00001).name('Particles Speed')
+
 /**
  * Camera Zoom on Scroll
  */
@@ -253,7 +257,7 @@ const tick = () => {
     
     // Rotate particles to the left
     particlesMeshes.forEach(particles => {
-        particles.rotation.y -= 0.0001
+        particles.rotation.y -= animationSettings.animSpeed
     })
     
     renderer.render(scene, camera)
