@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import GUI from 'lil-gui'
+import { initScrollSnap } from './scrollSnap'
 
 /**
  * Canvas
@@ -370,3 +371,4 @@ function scrollToNextSection() {
 }
 
 downArrow?.addEventListener('click', scrollToNextSection)
+initScrollSnap()

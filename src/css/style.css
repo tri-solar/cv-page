@@ -111,10 +111,10 @@ section {
 
 .right {
     top: 20%;
-    right: 7.5%;
-    background: rgba(0, 0, 0, 0.33);
+    left: 55%;
+    /*background: rgba(0, 0, 0, 0.33);
     backdrop-filter: blur(8px);
-    border-radius: 12px;
+    border-radius: 12px;*/
 }
 
 .subheader  {
@@ -136,7 +136,7 @@ section {
 
 .large-left {
     top: 55%;
-    right: 7.5%;
+    left: 55%;
     width: fit-content !important;
 }
 
