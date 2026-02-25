@@ -31,8 +31,9 @@ let uranus: THREE.Group
 let gui: GUI
 
 const gltfLoader = new GLTFLoader()
-gltfLoader.load('/models/uranus.glb', (gltf) => {
+gltfLoader.load('/models/uranus-improved.glb', (gltf) => {
     uranus = gltf.scene
+    uranus.rotation.x = 0.4
     uranus.castShadow = true
      uranus.receiveShadow = true
     uranus.traverse((child) => {
@@ -254,8 +255,9 @@ directionalLight.position.set(3, 10, -10)
 directionalLight.castShadow = true
 directionalLight.shadow.mapSize.width = 2048
 directionalLight.shadow.mapSize.height = 2048
-directionalLight.shadow.bias = -0.0001
-directionalLight.shadow.normalBias = 0.02
+directionalLight.shadow.bias = -0.001
+directionalLight.shadow.normalBias =  0.05
+
 scene.add(directionalLight)
 
 /**
@@ -303,6 +305,7 @@ const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.shadowMap.enabled = true
+renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
 /**
  * GUI
