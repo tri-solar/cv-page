@@ -1,0 +1,67 @@
+---
+import { ClientRouter } from 'astro:transitions'
+import '../css/legal.css'
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy</title>
+    <ClientRouter />
+  </head>
+  <body>
+    <canvas class="webgl" transition:persist></canvas>
+    <main>
+      <h1>Privacy Policy</h1>
+
+      <section>
+        <h2>General Information</h2>
+        <p>
+          This website is operated by Florian Klocke. Protecting your personal data is important. This page explains what data may be processed and for what purpose.
+        </p>
+      </section>
+
+      <section>
+        <h2>Server Log Files</h2>
+        <p>
+          The hosting provider may automatically collect technical information such as IP address, browser type, operating system, referrer URL, and timestamp.
+          This data is used to maintain secure and stable operation of the website.
+        </p>
+      </section>
+
+      <section>
+        <h2>Contact by Email</h2>
+        <p>
+          If you contact me by email, your data is processed only to handle your request.
+          Data is not shared with third parties unless required by law.
+        </p>
+      </section>
+
+      <section>
+        <h2>Your Rights</h2>
+        <p>
+          You have the right to access, rectify, erase, restrict processing, and object to processing of your personal data where legally applicable.
+          You also have the right to lodge a complaint with the responsible supervisory authority.
+        </p>
+      </section>
+
+      <section>
+        <h2>Contact</h2>
+        <p>
+          For privacy requests, contact:
+          <a href="mailto:florianklocke@proton.me">florianklocke@proton.me</a>
+        </p>
+      </section>
+
+      <nav aria-label="Legal navigation">
+        <a href="/" data-astro-prefetch>Back to Home</a>
+        <a href="/imprint" data-astro-prefetch>Imprint</a>
+      </nav>
+    </main>
+
+    <script>
+      import '../main.ts'
+    </script>
+  </body>
+</html>

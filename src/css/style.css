@@ -168,3 +168,12 @@ section {
     font-size: 0.8rem;
     margin-left: 5px;
 }
+
+.legal-links {
+    margin-top: 16px;
+    color: #9ed6e0;
+}
+
+.legal-links span {
+    color: #5f7d83;
+}

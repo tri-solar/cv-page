@@ -1,0 +1,48 @@
+---
+import { ClientRouter } from 'astro:transitions'
+import '../css/legal.css'
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Imprint</title>
+    <ClientRouter />
+  </head>
+  <body>
+    <canvas class="webgl" transition:persist></canvas>
+    <main>
+      <h1>Imprint</h1>
+
+      <section>
+        <h2>Information according to Section 5 TMG</h2>
+        <p>
+          Florian Klocke<br />
+          Paderborn, Germany
+        </p>
+      </section>
+
+      <section>
+        <h2>Contact</h2>
+        <p>
+          Email: <a href="mailto:florianklocke@proton.me">florianklocke@proton.me</a>
+        </p>
+      </section>
+
+      <section>
+        <h2>Editorially Responsible</h2>
+        <p>Florian Klocke</p>
+      </section>
+
+      <nav aria-label="Legal navigation">
+        <a href="/" data-astro-prefetch>Back to Home</a>
+        <a href="/privacy-policy" data-astro-prefetch>Privacy Policy</a>
+      </nav>
+    </main>
+
+    <script>
+      import '../main.ts'
+    </script>
+  </body>
+</html>

@@ -1,14 +1,17 @@
-<!doctype html>
+---
+import { ClientRouter } from 'astro:transitions'
+import '../css/style.css'
+---
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/src/css/style.css" />
-    <title>cv-page</title>
+    <title>Florian Klocke | Fullstack Web Developer</title>
+    <ClientRouter />
   </head>
   <body>
-    <canvas class="webgl"></canvas>
+    <canvas class="webgl" transition:persist></canvas>
     <div class="sections-wrapper">
       <section class="hero">
         <div class="content left">
@@ -29,6 +32,11 @@
               <img src="/icons/new-tab.svg" alt="new tab" class="icon small" />
             </a>
           </p>
+          <p class="with-icon legal-links">
+            <a href="/imprint" data-astro-prefetch>Imprint</a>
+            <span>|</span>
+            <a href="/privacy-policy" data-astro-prefetch>Privacy Policy</a>
+          </p>
         </div>
         <button class="down-arrow" aria-label="Scroll to next section">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -37,16 +45,18 @@
           </svg>
         </button>
       </section>
+
       <section class="content-section">
         <div class="content right">
           <h2 class="subheader">About Me</h2>
           <p class="about">
-            Hi. I'm Florian Klocke.<br>
-            I'm a fullstack web developer, focused on frontend.<br>
-            Currently, I'm finishing my apprenticeship at one of Germany's best premium e-commerce hosting providers.<br>
+            Hi. I am Florian Klocke.<br />
+            I am a fullstack web developer, focused on frontend.<br />
+            Currently, I am finishing my apprenticeship at one of Germany's best premium e-commerce hosting providers.<br />
             In my free time I like building small projects in Godot or three.js.
           </p>
         </div>
+
         <div class="content large-left">
           <h2 class="subheader">My Stack</h2>
           <div class="stack">
@@ -71,7 +81,9 @@
               <span class="skill-card">
                 <img src="/icons/html5.svg" alt="html" class="icon card-icon" />
                 <span class="card-text">HTML</span>
+              </span>
             </div>
+
             <div class="category">
               <h3>Backend</h3>
               <span class="skill-card">
@@ -91,6 +103,7 @@
                 <span class="card-text">MariaDB</span>
               </span>
             </div>
+
             <div class="category">
               <h3>Other</h3>
               <span class="skill-card">
@@ -113,10 +126,14 @@
                 <img src="/icons/figma.svg" alt="figma" class="icon card-icon" />
                 <span class="card-text">Figma</span>
               </span>
+            </div>
           </div>
         </div>
       </section>
     </div>
-    <script type="module" src="/src/main.ts"></script>
+
+    <script>
+      import '../main.ts'
+    </script>
   </body>
 </html>
