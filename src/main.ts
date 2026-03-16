@@ -133,7 +133,9 @@ particleTextures.forEach(texture => {
     
     for(let i = 0; i < count; i++)
     {
-        let x : number, y : number, z : number = 0
+        let x = 0
+        let y = 0
+        let z = 0
         let inExcludeZone = true
         
         while(inExcludeZone)
@@ -206,7 +208,9 @@ particleTextures.forEach(texture => {
     
     for(let i = 0; i < count; i++)
     {
-        let x : number, y : number, z : number = 0
+        let x = 0
+        let y = 0
+        let z = 0
         let inValidZone = false
         
         while(!inValidZone)
@@ -266,7 +270,7 @@ particleTextures.forEach(texture => {
 /**
  * Uranus Atmosphere
  */
-const atmosphereRadius = 1.015  // slightly larger than the planet (~1.0)
+const atmosphereRadius = 1.01  // slightly larger than the planet (~1.0)
 const atmosphereGeometry = new THREE.SphereGeometry(atmosphereRadius, 64, 64)
 
 const atmosphereUniforms = {
@@ -394,7 +398,7 @@ ringFolder.add(uranusRing.rotation, 'x', 0, Math.PI * 2, 0.01).name('Rotation X'
 ringFolder.add(uranusRing.rotation, 'y', 0, Math.PI * 2, 0.01).name('Rotation Y')
 ringFolder.add(uranusRing.rotation, 'z', 0, Math.PI * 2, 0.01).name('Rotation Z')
 
-const animationSettings = { animSpeed: 0.0001, rotateOnScroll: false }
+const animationSettings = { animSpeed: 0.0001, rotateOnScroll: true }
 const animationFolder = gui.addFolder('Animation')
 animationFolder.add(animationSettings, 'animSpeed', 0, 0.001, 0.00001).name('Particles Speed')
 animationFolder.add(animationSettings, 'rotateOnScroll').name('Rotate on Scroll')

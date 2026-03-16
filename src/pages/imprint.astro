@@ -3,42 +3,53 @@ import { ClientRouter } from 'astro:transitions'
 import '../css/legal.css'
 ---
 
-<html lang="en">
+<html lang="de">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Imprint</title>
+    <title>Impressum</title>
     <ClientRouter />
   </head>
   <body>
     <canvas class="webgl" transition:persist></canvas>
-    <main>
-      <h1>Imprint</h1>
+    <main class="privacy-main">
+      <div class="privacy-layout">
+        <aside class="section-jump" aria-label="Page Navigation">
+          <div class="section-jump-actions">
+            <a class="jump-action" href="/" data-astro-prefetch>Back</a>
+            <a class="jump-action" href="/privacy-policy" data-astro-prefetch>Privacy Policy</a>
+          </div>
+        </aside>
 
-      <section>
-        <h2>Information according to Section 5 TMG</h2>
-        <p>
-          Florian Klocke<br />
-          Paderborn, Germany
-        </p>
-      </section>
-
-      <section>
-        <h2>Contact</h2>
-        <p>
-          Email: <a href="mailto:florianklocke@proton.me">florianklocke@proton.me</a>
-        </p>
-      </section>
-
-      <section>
-        <h2>Editorially Responsible</h2>
-        <p>Florian Klocke</p>
-      </section>
-
-      <nav aria-label="Legal navigation">
-        <a href="/" data-astro-prefetch>Back to Home</a>
-        <a href="/privacy-policy" data-astro-prefetch>Privacy Policy</a>
-      </nav>
+        <article class="privacy-content">
+          <h1>Imprint</h1>
+          <p id="impressum-angaben">Information in accordance with Section 5 DDG</p>
+          <p>
+            Florian Klocke<br />
+            <br />
+            Leuschnerstr. 30a<br />
+            33102 Paderborn<br />
+          </p>
+          <p id="impressum-kontakt">
+            <strong>Contact:</strong><br />
+            Email: <a href="mailto:florianklocke@proton.me">florianklocke@proton.me</a>
+          </p>
+          <p id="impressum-streit">
+            <strong>Consumer Dispute Resolution / Universal Arbitration Board</strong><br />
+            We are not willing or obliged to participate in dispute resolution proceedings before a consumer arbitration board.
+          </p>
+          <p id="impressum-haftung">
+            <strong>Disclaimer:</strong><br />
+            <br /><strong>Liability for Content</strong><br />
+            The contents of our pages have been created with the utmost care. However, we cannot guarantee the accuracy, completeness, or timeliness of the content. As a service provider, we are responsible for our own content on these pages in accordance with Section 7(1) DDG under general law. According to Sections 8 to 10 DDG, however, we as a service provider are not obliged to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity. Obligations to remove or block the use of information in accordance with general law remain unaffected. However, liability in this regard is only possible from the point in time at which we become aware of a specific legal infringement. Upon becoming aware of such infringements, we will remove the relevant content immediately.<br /><br /><strong>Liability for Links</strong><br />
+            Our offer contains links to external third-party websites over whose content we have no influence. We therefore cannot accept any liability for this third-party content. The respective provider or operator of the linked pages is always responsible for their content. The linked pages were checked for possible legal violations at the time of linking. No illegal content was apparent at the time of linking. However, permanent monitoring of the content of linked pages is not reasonable without concrete indications of a legal violation. Upon becoming aware of legal violations, we will remove such links immediately.<br /><br /><strong id="impressum-urheber">Copyright</strong><br />
+            The content and works created by the site operators on these pages are subject to German copyright law. Reproduction, editing, distribution, and any kind of use beyond the limits of copyright law require the written consent of the respective author or creator. Downloads and copies of this site are only permitted for private, non-commercial use. Where content on this site was not created by the operator, the copyrights of third parties are respected. In particular, third-party content is identified as such. Should you nevertheless become aware of a copyright infringement, please notify us accordingly. Upon becoming aware of legal violations, we will remove such content immediately.
+          </p>
+          <p>
+            Imprint created with <a href="https://impressum-generator.de" rel="dofollow">Impressum-Generator.de</a>. Powered by <a href="https://www.kanzlei-hasselbach.de/" rel="nofollow">Franziska Hasselbach, Bonn</a>.
+          </p>
+        </article>
+      </div>
     </main>
 
     <script>

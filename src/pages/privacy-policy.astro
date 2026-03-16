@@ -3,65 +3,202 @@ import { ClientRouter } from 'astro:transitions'
 import '../css/legal.css'
 ---
 
-<html lang="en">
+<html lang="de">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Privacy Policy</title>
+    <title>Datenschutzerklaerung</title>
     <ClientRouter />
   </head>
   <body>
     <canvas class="webgl" transition:persist></canvas>
-    <main>
-      <h1>Privacy Policy</h1>
+    <main class="privacy-main">
+      <div class="privacy-layout">
+        <aside class="section-jump" aria-label="Section Navigation">
+          <p class="section-jump-title">Jump to</p>
+          <ul>
+            <li><a class="section-link" href="#m716">Preamble</a></li>
+            <li><a class="section-link" href="#m3">Controller</a></li>
+            <li><a class="section-link" href="#mOverview">Overview</a></li>
+            <li><a class="section-link" href="#m2427">Legal Bases</a></li>
+            <li><a class="section-link" href="#m27">Security Measures</a></li>
+            <li><a class="section-link" href="#m225">Web Hosting</a></li>
+            <li><a class="section-link" href="#m182">Contact Management</a></li>
+            <li><a class="section-link" href="#m328">Plug-ins</a></li>
+            <li><a class="section-link" href="#m15">Updates</a></li>
+          </ul>
+          <div class="section-jump-actions" aria-label="Page Navigation">
+            <a class="jump-action" href="/" data-astro-prefetch>Back</a>
+            <a class="jump-action" href="/imprint" data-astro-prefetch>Imprint</a>
+          </div>
+        </aside>
 
-      <section>
-        <h2>General Information</h2>
-        <p>
-          This website is operated by Florian Klocke. Protecting your personal data is important. This page explains what data may be processed and for what purpose.
-        </p>
-      </section>
+        <article class="privacy-content">
+          <h1>Privacy Policy</h1>
+          <h2 id="m716">Preamble</h2>
+          <p>With the following privacy policy, we would like to inform you about the types of your personal data (hereinafter also referred to as "data") we process, for what purposes, and to what extent. This privacy policy applies to all processing of personal data carried out by us, both in the context of providing our services and in particular on our websites, in mobile applications, and within external online presences, such as our social media profiles (hereinafter collectively referred to as "online offer").</p>
+          <p>The terms used are not gender-specific.</p>
+          <p>Last updated: March 16, 2026</p>
 
-      <section>
-        <h2>Server Log Files</h2>
-        <p>
-          The hosting provider may automatically collect technical information such as IP address, browser type, operating system, referrer URL, and timestamp.
-          This data is used to maintain secure and stable operation of the website.
-        </p>
-      </section>
+          <h2 id="m3">Controller</h2>
+          <p>
+            Florian Klocke<br />
+            Leuschnerstr. 30a<br />
+            33102 Paderborn<br />
+            <a href="mailto:florianklocke@proton.me">florianklocke@proton.me</a>
+          </p>
 
-      <section>
-        <h2>Contact by Email</h2>
-        <p>
-          If you contact me by email, your data is processed only to handle your request.
-          Data is not shared with third parties unless required by law.
-        </p>
-      </section>
+          <h2 id="mOverview">Overview of Processing Activities</h2>
+          <p>The following overview summarizes the types of data processed and the purposes of their processing, and refers to the data subjects.</p>
+          <h3>Types of Data Processed</h3>
+          <ul>
+            <li>Contact data.</li>
+            <li>Content data.</li>
+            <li>Usage data.</li>
+            <li>Meta, communication, and procedural data.</li>
+            <li>Log data.</li>
+          </ul>
+          <h3>Categories of Data Subjects</h3>
+          <ul>
+            <li>Communication partners.</li>
+            <li>Users.</li>
+          </ul>
+          <h3>Purposes of Processing</h3>
+          <ul>
+            <li>Communication.</li>
+            <li>Security measures.</li>
+            <li>Organisational and administrative procedures.</li>
+            <li>Feedback.</li>
+            <li>Provision of our online offer and user experience.</li>
+            <li>Information technology infrastructure.</li>
+          </ul>
 
-      <section>
-        <h2>Your Rights</h2>
-        <p>
-          You have the right to access, rectify, erase, restrict processing, and object to processing of your personal data where legally applicable.
-          You also have the right to lodge a complaint with the responsible supervisory authority.
-        </p>
-      </section>
+          <h2 id="m2427">Relevant Legal Bases</h2>
+          <p><strong>Relevant legal bases under the GDPR:</strong> The following provides an overview of the legal bases of the GDPR on which we process personal data. Please note that in addition to the GDPR, national data protection regulations may apply in your or our country of residence. Should specific legal bases apply in individual cases, we will inform you of these in the privacy policy.</p>
+          <ul>
+            <li><strong>Consent (Art. 6(1)(a) GDPR)</strong> – The data subject has given consent to the processing of their personal data for one or more specific purposes.</li>
+            <li><strong>Performance of a contract and pre-contractual inquiries (Art. 6(1)(b) GDPR)</strong> – Processing is necessary for the performance of a contract to which the data subject is party, or in order to take steps at the request of the data subject prior to entering into a contract.</li>
+            <li><strong>Legitimate interests (Art. 6(1)(f) GDPR)</strong> – Processing is necessary for the purposes of the legitimate interests pursued by the controller or a third party, except where such interests are overridden by the interests or fundamental rights and freedoms of the data subject.</li>
+          </ul>
+          <p><strong>National data protection regulations in Germany:</strong> In addition to the GDPR, national data protection regulations apply in Germany, in particular the Federal Data Protection Act (Bundesdatenschutzgesetz – BDSG). The BDSG contains specific provisions on the right to access, the right to erasure, the right to object, the processing of special categories of personal data, processing for other purposes, transmission, and automated decision-making including profiling. State data protection laws of individual German federal states may also apply.</p>
 
-      <section>
-        <h2>Contact</h2>
-        <p>
-          For privacy requests, contact:
-          <a href="mailto:florianklocke@proton.me">florianklocke@proton.me</a>
-        </p>
-      </section>
+          <h2 id="m27">Security Measures</h2>
+          <p>We implement appropriate technical and organisational measures in accordance with legal requirements, taking into account the state of the art, implementation costs, and the nature, scope, circumstances, and purposes of the processing, as well as the varying likelihood and severity of the risks to the rights and freedoms of natural persons, in order to ensure a level of security appropriate to the risk.</p>
+          <p>These measures include in particular securing the confidentiality, integrity, and availability of data by controlling physical and electronic access to the data, as well as access to, input of, disclosure of, ensuring availability of, and segregation of the data. We have also established procedures to ensure the exercise of data subject rights, deletion of data, and responses to data threats. Furthermore, we take the protection of personal data into account as early as the development and selection of hardware, software, and procedures, in accordance with the principle of data protection by design and by default.</p>
+          <p><strong>TLS/SSL encryption (HTTPS):</strong> To protect user data transmitted via our online services from unauthorised access, we use TLS/SSL encryption technology. Secure Sockets Layer (SSL) and Transport Layer Security (TLS) are the cornerstones of secure data transmission on the internet. These technologies encrypt the information transmitted between the website or app and the user's browser (or between two servers), thereby protecting the data from unauthorised access. TLS, as the more advanced and secure version of SSL, ensures that all data transmissions meet the highest security standards. When a website is secured by an SSL/TLS certificate, this is indicated by the display of HTTPS in the URL, serving as an indicator to users that their data is being transmitted securely and in encrypted form.</p>
 
-      <nav aria-label="Legal navigation">
-        <a href="/" data-astro-prefetch>Back to Home</a>
-        <a href="/imprint" data-astro-prefetch>Imprint</a>
-      </nav>
+          <h2 id="m225">Provision of the Online Offer and Web Hosting</h2>
+          <p>We process user data in order to provide our online services. For this purpose, we process the user's IP address, which is necessary to transmit the content and functions of our online services to the user's browser or device.</p>
+          <ul class="m-elements">
+            <li><strong>Types of data processed:</strong> Usage data (e.g. page views and time spent, click paths, usage intensity and frequency, device types and operating systems used, interactions with content and functions); meta, communication, and procedural data (e.g. IP addresses, timestamps, identification numbers, persons involved). Log data (e.g. log files relating to logins or the retrieval of data or access times).</li>
+            <li><strong>Data subjects:</strong> Users (e.g. website visitors, users of online services).</li>
+            <li><strong>Purposes of processing and legitimate interests:</strong> Provision of our online offer and user experience; information technology infrastructure (operation and provision of information systems and technical devices (computers, servers, etc.)). Security measures.</li>
+            <li><strong>Retention and deletion:</strong> Deletion in accordance with the information provided in the section "General Information on Data Retention and Deletion".</li>
+            <li><strong>Legal bases:</strong> Legitimate interests (Art. 6(1)(f) GDPR).</li>
+          </ul>
+          <p><strong>Further information on processing activities, procedures, and services:</strong></p>
+          <ul class="m-elements">
+            <li><strong>Provision of the online offer on rented storage space:</strong> To provide our online offer, we use storage space, computing capacity, and software rented or otherwise obtained from a server provider (also referred to as a "web host"); <span><strong>Legal bases:</strong> Legitimate interests (Art. 6(1)(f) GDPR).</span></li>
+            <li><strong>Collection of access data and log files:</strong> Access to our online offer is logged in the form of so-called "server log files". Server log files may include the address and name of the web pages and files accessed, the date and time of access, data volumes transferred, notification of successful retrieval, browser type and version, the user's operating system, referrer URL (the previously visited page), and as a rule IP addresses and the requesting provider. Server log files may be used for security purposes, e.g. to avoid server overload (especially in the case of abusive attacks, so-called DDoS attacks), and to ensure server load and stability; <span><strong>Legal bases:</strong> Legitimate interests (Art. 6(1)(f) GDPR). </span><strong>Deletion of data:</strong> Log file information is stored for a maximum of 30 days and then deleted or anonymised. Data whose further retention is required for evidentiary purposes is exempt from deletion until the final resolution of the relevant incident.</li>
+            <li><strong>Content Delivery Network:</strong> We use a Content Delivery Network (CDN). A CDN is a service that helps deliver content of an online offer, in particular large media files such as graphics or scripts, faster and more securely with the help of regionally distributed servers connected via the internet; <span><strong>Legal bases:</strong> Legitimate interests (Art. 6(1)(f) GDPR).</span></li>
+            <li><strong>Hetzner:</strong> Services in the field of providing information technology infrastructure and related services (e.g. storage space and/or computing capacity); <strong>Service provider:</strong> Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen, Germany; <span><strong>Legal bases:</strong> Legitimate interests (Art. 6(1)(f) GDPR); </span><strong>Website:</strong> <a href="https://www.hetzner.com" target="_blank">https://www.hetzner.com</a>; <strong>Privacy policy:</strong> <a href="https://www.hetzner.com/legal/privacy-policy" target="_blank">https://www.hetzner.com/legal/privacy-policy</a>. <strong>Data processing agreement:</strong> <a href="https://docs.hetzner.com/general/general-terms-and-conditions/data-privacy-faq/" target="_blank">https://docs.hetzner.com/general/general-terms-and-conditions/data-privacy-faq/</a>.</li>
+            <li><strong>Cloudflare:</strong> Content Delivery Network (CDN) and security services (DDoS protection, Web Application Firewall). When visiting our website, connection data including IP addresses is processed by Cloudflare. Our VPS server is located in Finland (EU); however, Cloudflare operates globally distributed data centres. <strong>Service provider:</strong> Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, USA; <span><strong>Legal bases:</strong> Legitimate interests (Art. 6(1)(f) GDPR); </span><strong>Website:</strong> <a href="https://www.cloudflare.com" target="_blank">https://www.cloudflare.com</a>; <strong>Privacy policy:</strong> <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">https://www.cloudflare.com/privacypolicy/</a>; <strong>Basis for third-country transfers:</strong> Data Privacy Framework (DPF).</li>
+          </ul>
+
+          <h2 id="m182">Contact and Inquiry Management</h2>
+          <p>When contacting us (e.g. by post, contact form, email, phone, or via social media) and in the context of existing user and business relationships, the information provided by the inquiring person is processed to the extent necessary to respond to contact inquiries and any requested measures.</p>
+          <ul class="m-elements">
+            <li><strong>Types of data processed:</strong> Contact data (e.g. postal and email addresses or phone numbers); content data (e.g. text or image messages and contributions, as well as information relating to them, such as details of authorship or time of creation). Meta, communication, and procedural data (e.g. IP addresses, timestamps, identification numbers, persons involved).</li>
+            <li><strong>Data subjects:</strong> Communication partners.</li>
+            <li><strong>Purposes of processing and legitimate interests:</strong> Communication; organisational and administrative procedures; feedback (e.g. collecting feedback via online form). Provision of our online offer and user experience.</li>
+            <li><strong>Retention and deletion:</strong> Deletion in accordance with the information provided in the section "General Information on Data Retention and Deletion".</li>
+            <li><strong>Legal bases:</strong> Legitimate interests (Art. 6(1)(f) GDPR). Performance of a contract and pre-contractual inquiries (Art. 6(1)(b) GDPR).</li>
+          </ul>
+          <p><strong>Further information on processing activities, procedures, and services:</strong></p>
+          <ul class="m-elements">
+            <li><strong>Contact form:</strong> When contacting us via our contact form, by email, or other communication channels, we process the personal data transmitted to us in order to respond to and handle the respective request. This typically includes details such as name, contact information, and any other information provided to us that is required for appropriate processing. We use this data exclusively for the stated purpose of contact and communication; <span><strong>Legal bases:</strong> Performance of a contract and pre-contractual inquiries (Art. 6(1)(b) GDPR), Legitimate interests (Art. 6(1)(f) GDPR).</span></li>
+          </ul>
+
+          <h2 id="m328">Plug-ins and Embedded Functions and Content</h2>
+          <p>We integrate functional and content elements into our online offer that are obtained from the servers of their respective providers (hereinafter referred to as "third-party providers"). These may include, for example, graphics, videos, or maps (hereinafter collectively referred to as "content").</p>
+          <p>Integration always requires that the third-party providers of this content process the IP address of users, as without the IP address they would be unable to send the content to the user's browser. The IP address is therefore required for the display of this content or these functions. We endeavour to use only such content whose respective providers use the IP address solely for the delivery of the content. Third-party providers may also use so-called pixel tags (invisible graphics, also referred to as "web beacons") for statistical or marketing purposes. The pixel tags can be used to evaluate information such as visitor traffic on the pages of this website. The pseudonymous information may additionally be stored in cookies on the user's device and may contain, among other things, technical information about the browser and operating system, referring websites, visit time, and other details about the use of our online offer, and may also be linked to such information from other sources.</p>
+          <p><strong>Notes on legal bases:</strong> Where we ask users for their consent to the use of third-party providers, the legal basis for data processing is the consent given. Otherwise, user data is processed on the basis of our legitimate interests (i.e. interest in efficient, economic, and user-friendly services). In this context, we would also like to draw your attention to the information on the use of cookies in this privacy policy.</p>
+          <ul class="m-elements">
+            <li><strong>Types of data processed:</strong> Usage data (e.g. page views and time spent, click paths, usage intensity and frequency, device types and operating systems used, interactions with content and functions). Meta, communication, and procedural data (e.g. IP addresses, timestamps, identification numbers, persons involved).</li>
+            <li><strong>Data subjects:</strong> Users (e.g. website visitors, users of online services).</li>
+            <li><strong>Purposes of processing and legitimate interests:</strong> Provision of our online offer and user experience.</li>
+            <li><strong>Retention and deletion:</strong> Deletion in accordance with the information provided in the section "General Information on Data Retention and Deletion". Storage of cookies for up to 2 years (unless otherwise specified, cookies and similar storage methods may be stored on users' devices for a period of up to two years).</li>
+            <li><strong>Legal bases:</strong> Consent (Art. 6(1)(a) GDPR). Legitimate interests (Art. 6(1)(f) GDPR).</li>
+          </ul>
+          <p><strong>Further information on processing activities, procedures, and services:</strong></p>
+          <ul class="m-elements">
+            <li><strong>Integration of third-party software, scripts, or frameworks (e.g. jQuery):</strong> We integrate software into our online offer that we retrieve from servers of other providers (e.g. function libraries used for the purpose of displaying or improving the usability of our online offer). The respective providers collect the IP address of users and may process it for the purposes of transmitting the software to the user's browser, for security purposes, and for the evaluation and optimisation of their services; <span><strong>Legal bases:</strong> Legitimate interests (Art. 6(1)(f) GDPR).</span></li>
+            <li><strong>Google Fonts (retrieved from Google servers):</strong> Retrieval of fonts (and symbols) for the purpose of technically secure, maintenance-free, and efficient use of fonts and symbols with regard to currency and loading times, their consistent rendering, and consideration of possible licensing restrictions. The provider of the fonts is informed of the user's IP address so that the fonts can be made available in the user's browser. In addition, technical data (language settings, screen resolution, operating system, hardware used) is transmitted, which is necessary for the provision of fonts depending on the devices used and the technical environment. This data may be processed on a server of the font provider in the USA. When visiting our online offer, users' browsers send their HTTP requests to the Google Fonts Web API (i.e. a software interface for retrieving fonts). The Google Fonts Web API provides users with the Cascading Style Sheets (CSS) of Google Fonts and then with the fonts specified in the CSS. These HTTP requests include (1) the IP address used by the respective user to access the internet, (2) the requested URL on the Google server, and (3) the HTTP headers, including the user agent describing the browser and operating system versions of the website visitors, as well as the referral URL (i.e. the page on which the Google font is to be displayed). IP addresses are neither logged nor stored on Google servers and are not analysed. The Google Fonts Web API logs details of HTTP requests (requested URL, user agent, and referral URL). Access to this data is restricted and strictly controlled. Google states that it does not use any of the information collected by Google Fonts to create profiles of end users or to serve targeted ads; <strong>Service provider:</strong> Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland; <span><strong>Legal bases:</strong> Legitimate interests (Art. 6(1)(f) GDPR); </span><strong>Website:</strong> <a href="https://fonts.google.com/" target="_blank">https://fonts.google.com/</a>; <strong>Privacy policy:</strong> <a href="https://policies.google.com/privacy" target="_blank">https://policies.google.com/privacy</a>; <strong>Basis for third-country transfers:</strong> Data Privacy Framework (DPF). <strong>Further information:</strong> <a href="https://developers.google.com/fonts/faq/privacy" target="_blank">https://developers.google.com/fonts/faq/privacy</a>.</li>
+          </ul>
+
+          <h2 id="m15">Changes and Updates</h2>
+          <p>We ask you to regularly check the content of this privacy policy. We will update the privacy policy as soon as changes to the data processing carried out by us require it. We will notify you as soon as the changes require an action on your part (e.g. consent) or any other individual notification.</p>
+          <p>Where we provide addresses and contact information of companies and organisations in this privacy policy, please note that addresses may change over time and we ask you to verify the details before making contact.</p>
+
+          <p class="seal"><a href="https://datenschutz-generator.de/" title="Legal text by Dr. Schwenke – click for more information." target="_blank" rel="noopener noreferrer nofollow">Created with the free privacy policy generator by Dr. Thomas Schwenke</a></p>
+        </article>
+      </div>
     </main>
 
     <script>
       import '../main.ts'
+    </script>
+
+    <script>
+      const sectionLinks = Array.from(document.querySelectorAll('.section-link'))
+      const sections = sectionLinks
+        .map((link) => {
+          const hash = link.getAttribute('href')
+          return hash ? document.querySelector(hash) : null
+        })
+        .filter((section) => section instanceof HTMLElement)
+
+      function setActiveSection(id: string) {
+        for (const link of sectionLinks) {
+          const isActive = link.getAttribute('href') === `#${id}`
+          link.classList.toggle('is-active', isActive)
+          if (isActive) {
+            link.setAttribute('aria-current', 'location')
+          } else {
+            link.removeAttribute('aria-current')
+          }
+        }
+      }
+
+      function updateActiveFromScroll() {
+        if (!sections.length) {
+          return
+        }
+
+        const markerY = window.scrollY + 180
+        let currentSection = sections[0]
+
+        for (const section of sections) {
+          if (!(section instanceof HTMLElement)) {
+            continue
+          }
+
+          if (section.offsetTop <= markerY) {
+            currentSection = section
+          } else {
+            break
+          }
+        }
+
+        if (currentSection instanceof HTMLElement) {
+          setActiveSection(currentSection.id)
+        }
+      }
+
+      updateActiveFromScroll()
+      window.addEventListener('scroll', updateActiveFromScroll, { passive: true })
+      window.addEventListener('resize', updateActiveFromScroll)
+      window.addEventListener('hashchange', updateActiveFromScroll)
     </script>
   </body>
 </html>
