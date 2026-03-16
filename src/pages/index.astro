@@ -1,13 +1,15 @@
 ---
 import { ClientRouter } from 'astro:transitions'
 import '../css/style.css'
+import favicon from '../planet-outline-svgrepo-com.png'
 ---
 
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Florian Klocke | Fullstack Web Developer</title>
+    <link rel="icon" type="image/png" href={favicon.src} />
+    <title>Florian Klocke | CV-Page</title>
     <ClientRouter />
   </head>
   <body>
