@@ -1,4 +1,13 @@
 @import './arrow.css';
+@import './variables.css';
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('../fonts/JetBrainsMono-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
 
 * {
     margin: 0;
@@ -27,6 +36,7 @@ a {
 body {
     overflow-y: scroll;
     height: 100vh;
+    font-family: var(--font-mono);
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
@@ -67,7 +77,7 @@ section {
 }
 
 .link-icon {
-    color: #c0c0c0;
+    color: var(--tone-text-muted);
     filter: brightness(0) invert(1) opacity(0.7);
     pointer-events: all !important;
 }
@@ -76,21 +86,21 @@ section {
     position: absolute;
     width: 30%;
     padding: 40px;
-    color: #e0e0e0;
-    font-family: 'Monaco', 'Menlo', monospace;
+    color: var(--tone-text);
+    font-family: var(--font-mono);
     pointer-events: none;
 }
 
 .content h1 {
     font-size: 2.5rem;
     font-weight: 600;
-    color: #42DAED;
+    color: var(--tone-accent);
 }
 
 .content p {
     font-size: 1rem;
     line-height: 1.6;
-    color: #c0c0c0;
+    color: var(--tone-text-muted);
 }
 
 .content .with-icon {
@@ -120,7 +130,7 @@ section {
 .subheader  {
     font-size: 1.5rem;
     font-weight: 500;
-    color: #42DAED;
+    color: var(--tone-accent);
     margin-bottom: 20px;
 }
 
@@ -144,27 +154,55 @@ section {
     margin-right: 20px;
 }
 
+.category-card {
+    background: var(--tone-surface);
+    border: 1px solid var(--tone-border);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.category-card h3 {
+    color: var(--tone-accent-soft);
+    margin-bottom: 8px;
+}
+
 .card-icon {
-    color: #42DAED;
+    color: var(--tone-accent);
     filter: brightness(0) saturate(100%) invert(1) sepia(1) saturate(10000%) hue-rotate(180deg);
 }
 
 .skill-card {
     display: flex;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(66, 218, 237, 0.5);
-    border-radius: 8px;
-    padding: 5px;
-    margin: 10px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 5px 0;
+    margin: 0;
     text-align: center;
     align-items: center;
-    margin-left: 0;
-    width: fit-content;
+    width: 100%;
 }
 
 .card-text {
-    color: #c0c0c0;
-    font-family: 'Monaco', 'Menlo', monospace;
+    color: var(--tone-text-muted);
+    font-family: var(--font-mono);
     font-size: 0.8rem;
     margin-left: 5px;
+}
+
+.legal-links {
+    margin-top: 16px;
+    color: var(--tone-accent-soft);
+}
+
+.legal-links a {
+    transition: color 120ms ease;
+}
+
+.legal-links a:hover {
+    color: var(--tone-text);
+}
+
+.legal-links span {
+    color: var(--tone-accent-muted);
 }

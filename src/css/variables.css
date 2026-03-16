@@ -1,0 +1,13 @@
+:root {
+  --font-mono: 'JetBrains Mono', 'Monaco', 'Menlo', monospace;
+
+  --tone-bg: #000;
+  --tone-text: #e0e0e0;
+  --tone-text-muted: #c0c0c0;
+  --tone-accent: #42daed;
+  --tone-accent-soft: #9ed6e0;
+  --tone-accent-muted: #5f7d83;
+  --tone-surface: rgba(0, 0, 0, 0.5);
+  --tone-border: rgba(95, 125, 131, 0.55);
+  --tone-border-soft: rgba(95, 125, 131, 0.4);
+}

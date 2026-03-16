@@ -1,14 +1,31 @@
 import * as THREE from 'three'
 import GUI from 'lil-gui'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { initScrollSnap } from './scrollSnap'
+import { LEGAL_CAMERA_TURN_ANGLE, isLegalRoute } from './legalRoutes'
+import { setScrollSnapEnabled } from './scrollSnap'
 import atmosphereVertSrc from './shaders/atmosphere.vert?raw'
 import atmosphereFragSrc from './shaders/atmosphere.frag?raw'
+
+let legalViewActive = isLegalRoute(window.location.pathname)
+let cameraTurnCurrent = legalViewActive ? LEGAL_CAMERA_TURN_ANGLE : 0
+let cameraTurnTarget = cameraTurnCurrent
+
+function getOrCreateCanvas(): HTMLCanvasElement {
+    const existingCanvas = document.querySelector('canvas.webgl')
+    if (existingCanvas instanceof HTMLCanvasElement) {
+        return existingCanvas
+    }
+
+    const createdCanvas = document.createElement('canvas')
+    createdCanvas.className = 'webgl'
+    document.body.prepend(createdCanvas)
+    return createdCanvas
+}
 
 /**
  * Canvas
  */
-const canvas = document.querySelector('canvas.webgl') as HTMLCanvasElement
+const canvas = getOrCreateCanvas()
 
 /**
  * Scene
@@ -116,7 +133,9 @@ particleTextures.forEach(texture => {
     
     for(let i = 0; i < count; i++)
     {
-        let x, y, z
+        let x = 0
+        let y = 0
+        let z = 0
         let inExcludeZone = true
         
         while(inExcludeZone)
@@ -189,7 +208,9 @@ particleTextures.forEach(texture => {
     
     for(let i = 0; i < count; i++)
     {
-        let x, y, z
+        let x = 0
+        let y = 0
+        let z = 0
         let inValidZone = false
         
         while(!inValidZone)
@@ -249,7 +270,7 @@ particleTextures.forEach(texture => {
 /**
  * Uranus Atmosphere
  */
-const atmosphereRadius = 1.015  // slightly larger than the planet (~1.0)
+const atmosphereRadius = 1.01  // slightly larger than the planet (~1.0)
 const atmosphereGeometry = new THREE.SphereGeometry(atmosphereRadius, 64, 64)
 
 const atmosphereUniforms = {
@@ -338,6 +359,24 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
+function ensureRendererCanvasMounted() {
+    const renderCanvas = renderer.domElement
+    renderCanvas.classList.add('webgl')
+
+    if (!renderCanvas.isConnected) {
+        document.body.prepend(renderCanvas)
+    }
+
+    const canvases = Array.from(document.querySelectorAll('canvas.webgl'))
+    canvases.forEach((candidate) => {
+        if (candidate !== renderCanvas) {
+            candidate.remove()
+        }
+    })
+}
+
+ensureRendererCanvasMounted()
+
 /**
  * GUI
  */
@@ -359,7 +398,7 @@ ringFolder.add(uranusRing.rotation, 'x', 0, Math.PI * 2, 0.01).name('Rotation X'
 ringFolder.add(uranusRing.rotation, 'y', 0, Math.PI * 2, 0.01).name('Rotation Y')
 ringFolder.add(uranusRing.rotation, 'z', 0, Math.PI * 2, 0.01).name('Rotation Z')
 
-const animationSettings = { animSpeed: 0.0001, rotateOnScroll: false }
+const animationSettings = { animSpeed: 0.0001, rotateOnScroll: true }
 const animationFolder = gui.addFolder('Animation')
 animationFolder.add(animationSettings, 'animSpeed', 0, 0.001, 0.00001).name('Particles Speed')
 animationFolder.add(animationSettings, 'rotateOnScroll').name('Rotate on Scroll')
@@ -387,12 +426,24 @@ cameraFolder.add(endCameraSettings, 'lookAtX', -10, 10, 0.1).name('LookAt X')
 cameraFolder.add(endCameraSettings, 'lookAtY', -10, 10, 0.1).name('LookAt Y')
 cameraFolder.add(endCameraSettings, 'lookAtZ', -10, 10, 0.1).name('LookAt Z')
 
+function syncRouteMode() {
+    legalViewActive = isLegalRoute(window.location.pathname)
+    cameraTurnTarget = legalViewActive ? LEGAL_CAMERA_TURN_ANGLE : 0
+    gui.domElement.style.display = legalViewActive ? 'none' : ''
+}
+
+syncRouteMode()
+
 /**
  * Camera Zoom on Scroll
  */
 const initialCameraX = 6
 const initialCameraY = 2
 const initialCameraZ = 0
+const lookAtTarget = new THREE.Vector3()
+const turnedLookAtTarget = new THREE.Vector3()
+const viewDirection = new THREE.Vector3()
+const upAxis = new THREE.Vector3(0, 1, 0)
 
 /**
  * Animate
@@ -400,16 +451,27 @@ const initialCameraZ = 0
 const tick = () => {
     const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
     const scrollHeight = document.body.scrollHeight - window.innerHeight
-    const scrollProgress = scrollHeight > 0 ? scrollY / scrollHeight : 0
-    
-    camera.position.x = initialCameraX + (endCameraSettings.x - initialCameraX) * scrollProgress
-    camera.position.y = initialCameraY + (endCameraSettings.y - initialCameraY) * scrollProgress
-    camera.position.z = initialCameraZ + (endCameraSettings.z - initialCameraZ) * scrollProgress
+    const scrollProgress = legalViewActive ? 0 : (scrollHeight > 0 ? scrollY / scrollHeight : 0)
+
+    const baseCameraX = initialCameraX + (endCameraSettings.x - initialCameraX) * scrollProgress
+    const baseCameraY = initialCameraY + (endCameraSettings.y - initialCameraY) * scrollProgress
+    const baseCameraZ = initialCameraZ + (endCameraSettings.z - initialCameraZ) * scrollProgress
+
+    camera.position.x = baseCameraX
+    camera.position.y = baseCameraY
+    camera.position.z = baseCameraZ
     
     const lookAtX = 0 + (endCameraSettings.lookAtX - 0) * scrollProgress
     const lookAtY = 0 + (endCameraSettings.lookAtY - 0) * scrollProgress
     const lookAtZ = 0 + (endCameraSettings.lookAtZ - 0) * scrollProgress
-    camera.lookAt(lookAtX, lookAtY, lookAtZ)
+
+    cameraTurnCurrent += (cameraTurnTarget - cameraTurnCurrent) * 0.06
+
+    lookAtTarget.set(lookAtX, lookAtY, lookAtZ)
+    viewDirection.copy(lookAtTarget).sub(camera.position).normalize()
+    viewDirection.applyAxisAngle(upAxis, cameraTurnCurrent)
+    turnedLookAtTarget.copy(camera.position).add(viewDirection)
+    camera.lookAt(turnedLookAtTarget)
     
     // Animate Uranus rotation
     if (uranus && animationSettings.rotateOnScroll) {
@@ -435,10 +497,8 @@ tick()
 /**
  * Scroll Navigation
  */
-const downArrow = document.querySelector('.down-arrow') as HTMLElement
-const sections = document.querySelectorAll('section')
-
 function scrollToNextSection() {
+    const sections = document.querySelectorAll('section')
     const currentScroll = window.scrollY + window.innerHeight / 2
 
     for (let i = 0; i < sections.length; i++) {
@@ -450,5 +510,21 @@ function scrollToNextSection() {
     }
 }
 
-downArrow?.addEventListener('click', scrollToNextSection)
-initScrollSnap()
+function syncRouteDom() {
+    const downArrow = document.querySelector('.down-arrow') as HTMLElement | null
+
+    if (downArrow) {
+        downArrow.onclick = legalViewActive ? null : scrollToNextSection
+        downArrow.style.display = legalViewActive ? 'none' : ''
+    }
+
+    setScrollSnapEnabled(!legalViewActive)
+}
+
+syncRouteDom()
+
+document.addEventListener('astro:page-load', () => {
+    ensureRendererCanvasMounted()
+    syncRouteMode()
+    syncRouteDom()
+})
