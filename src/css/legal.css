@@ -110,11 +110,6 @@ a {
   text-decoration: none;
   line-height: 1.25;
   font-size: 0.9rem;
-  color: var(--tone-accent-soft);
-}
-
-.section-jump a:hover {
-  text-decoration: underline;
 }
 
 .section-jump ul a {
@@ -151,7 +146,7 @@ a {
 .section-jump-actions {
   margin-top: 0.9rem;
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(66, 218, 237, 0.25);
+  border-top: 1px solid var(--tone-border-soft);
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
@@ -168,14 +163,16 @@ a {
   border: none;
   border-radius: 8px;
   padding: 0.45rem 0.7rem;
-  color: var(--tone-accent);
+  color: var(--tone-text-muted);
   background: transparent;
+  transition: color 120ms ease;
 }
 
-.jump-action:hover {
+.section-jump .jump-action:hover {
   text-decoration: none;
+  color: var(--tone-text);
   background: transparent;
-  opacity: 0.85;
+  opacity: 1;
 }
 
 .privacy-content [id] {
