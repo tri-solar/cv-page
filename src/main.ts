@@ -2,6 +2,8 @@ import * as THREE from 'three'
 import GUI from 'lil-gui'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { initScrollSnap } from './scrollSnap'
+import atmosphereVertSrc from './shaders/atmosphere.vert?raw'
+import atmosphereFragSrc from './shaders/atmosphere.frag?raw'
 
 /**
  * Canvas
@@ -245,6 +247,35 @@ particleTextures.forEach(texture => {
 })
 
 /**
+ * Uranus Atmosphere
+ */
+const atmosphereRadius = 1.015  // slightly larger than the planet (~1.0)
+const atmosphereGeometry = new THREE.SphereGeometry(atmosphereRadius, 64, 64)
+
+const atmosphereUniforms = {
+    uLightDirection: { value: new THREE.Vector3(3, 10, -10).normalize() },
+    uDaySideColor:   { value: new THREE.Color('#a8e6ff') },  // icy cyan-blue (lit)
+    uNightSideColor: { value: new THREE.Color('#1a3a5c') },  // deep navy (dark)
+    uRimColor:       { value: new THREE.Color('#c8f0ff') },  // bright white-blue rim
+    uFresnelPower:   { value: 3.5 },
+    uAtmosOpacity:   { value: 0.55 },
+}
+
+const atmosphereMaterial = new THREE.ShaderMaterial({
+    vertexShader:   atmosphereVertSrc,
+    fragmentShader: atmosphereFragSrc,
+    uniforms:       atmosphereUniforms,
+    transparent:    true,
+    depthWrite:     false,
+    side:           THREE.FrontSide,
+    blending:       THREE.NormalBlending,
+})
+
+const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial)
+atmosphereMesh.visible = false
+scene.add(atmosphereMesh)
+
+/**
  * Lights
  */
 const ambientLight = new THREE.AmbientLight('#ffffff', 0.01)
@@ -328,9 +359,24 @@ ringFolder.add(uranusRing.rotation, 'x', 0, Math.PI * 2, 0.01).name('Rotation X'
 ringFolder.add(uranusRing.rotation, 'y', 0, Math.PI * 2, 0.01).name('Rotation Y')
 ringFolder.add(uranusRing.rotation, 'z', 0, Math.PI * 2, 0.01).name('Rotation Z')
 
-const animationSettings = { animSpeed: 0.0001 }
+const animationSettings = { animSpeed: 0.0001, rotateOnScroll: false }
 const animationFolder = gui.addFolder('Animation')
 animationFolder.add(animationSettings, 'animSpeed', 0, 0.001, 0.00001).name('Particles Speed')
+animationFolder.add(animationSettings, 'rotateOnScroll').name('Rotate on Scroll')
+
+const atmosFolder = gui.addFolder('Atmosphere')
+atmosFolder.add(atmosphereUniforms.uFresnelPower, 'value', 1, 8, 0.1).name('Fresnel Power')
+atmosFolder.add(atmosphereUniforms.uAtmosOpacity, 'value', 0, 1, 0.01).name('Opacity')
+atmosFolder.addColor({ color: '#a8e6ff' }, 'color')
+    .name('Day Side Color')
+    .onChange((v: string) => atmosphereUniforms.uDaySideColor.value.set(v))
+atmosFolder.addColor({ color: '#1a3a5c' }, 'color')
+    .name('Night Side Color')
+    .onChange((v: string) => atmosphereUniforms.uNightSideColor.value.set(v))
+atmosFolder.addColor({ color: '#c8f0ff' }, 'color')
+    .name('Rim Color')
+    .onChange((v: string) => atmosphereUniforms.uRimColor.value.set(v))
+atmosFolder.add(atmosphereMesh, 'visible').name('Visible')
 
 const endCameraSettings = { x: 2.1, y: 0.9, z: -0.09, lookAtX: -1.6, lookAtY: -0.09, lookAtZ: -2 }
 const cameraFolder = gui.addFolder('End Camera')
@@ -366,7 +412,7 @@ const tick = () => {
     camera.lookAt(lookAtX, lookAtY, lookAtZ)
     
     // Animate Uranus rotation
-    if (uranus) {
+    if (uranus && animationSettings.rotateOnScroll) {
         uranus.rotation.y = 3 + (0 - 3) * scrollProgress
     }
     
@@ -375,6 +421,11 @@ const tick = () => {
         particles.rotation.y -= animationSettings.animSpeed
     })
     
+    // Update atmosphere uniforms
+    atmosphereUniforms.uLightDirection.value
+        .copy(directionalLight.position)
+        .normalize()
+
     renderer.render(scene, camera)
     window.requestAnimationFrame(tick)
 }
