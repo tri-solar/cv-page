@@ -1,96 +1,95 @@
-import * as THREE from 'three'
-import GUI from 'lil-gui'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { LEGAL_CAMERA_TURN_ANGLE, isLegalRoute } from './legalRoutes'
-import { setScrollSnapEnabled } from './scrollSnap'
-import atmosphereVertSrc from './shaders/atmosphere.vert?raw'
-import atmosphereFragSrc from './shaders/atmosphere.frag?raw'
+import * as THREE from 'three';
+import GUI from 'lil-gui';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { LEGAL_CAMERA_TURN_ANGLE, isLegalRoute } from './legalRoutes';
+import { setScrollSnapEnabled } from './scrollSnap';
+import atmosphereVertSrc from './shaders/atmosphere.vert?raw';
+import atmosphereFragSrc from './shaders/atmosphere.frag?raw';
 
-let legalViewActive = isLegalRoute(window.location.pathname)
-let cameraTurnCurrent = legalViewActive ? LEGAL_CAMERA_TURN_ANGLE : 0
-let cameraTurnTarget = cameraTurnCurrent
+let legalViewActive = isLegalRoute(window.location.pathname);
+let cameraTurnCurrent = legalViewActive ? LEGAL_CAMERA_TURN_ANGLE : 0;
+let cameraTurnTarget = cameraTurnCurrent;
 
 function getOrCreateCanvas(): HTMLCanvasElement {
-    const existingCanvas = document.querySelector('canvas.webgl')
+    const existingCanvas = document.querySelector('canvas.webgl');
     if (existingCanvas instanceof HTMLCanvasElement) {
-        return existingCanvas
+        return existingCanvas;
     }
 
-    const createdCanvas = document.createElement('canvas')
-    createdCanvas.className = 'webgl'
-    document.body.prepend(createdCanvas)
-    return createdCanvas
+    const createdCanvas = document.createElement('canvas');
+    createdCanvas.className = 'webgl';
+    document.body.prepend(createdCanvas);
+    return createdCanvas;
 }
 
-const canvas = getOrCreateCanvas()
+const canvas = getOrCreateCanvas();
 
-const scene = new THREE.Scene()
+const scene = new THREE.Scene();
 
-const textureLoader = new THREE.TextureLoader()
-const uranusColor = textureLoader.load('/textures/uranus-color-tuned.webp')
-uranusColor.colorSpace = THREE.SRGBColorSpace
+const textureLoader = new THREE.TextureLoader();
+const uranusColor = textureLoader.load('/textures/uranus-color-tuned.webp');
+uranusColor.colorSpace = THREE.SRGBColorSpace;
 
 const particleTextures = [
     textureLoader.load('/textures/particles/star1.png'),
     textureLoader.load('/textures/particles/star2.png'),
     textureLoader.load('/textures/particles/star3.png')
-]
+];
 
-let uranus: THREE.Group
-let gui: GUI
-let assetsReady = false
+let uranus: THREE.Group;
+let assetsReady = false;
 
 function hideLoader() {
-    const loader = document.getElementById('loader')
+    const loader = document.getElementById('loader');
     if (loader) {
-        loader.classList.add('loader--done')
-        setTimeout(() => loader.remove(), 500)
+        loader.classList.add('loader--done');
+        setTimeout(() => loader.remove(), 500);
     }
 }
 
-const gltfLoader = new GLTFLoader()
+const gltfLoader = new GLTFLoader();
 gltfLoader.load('/models/uranus-improved.glb', (gltf) => {
-    uranus = gltf.scene
-    uranus.rotation.x = 0.4
-    uranus.castShadow = true
-     uranus.receiveShadow = true
+    uranus = gltf.scene;
+    uranus.rotation.x = 0.4;
+    uranus.castShadow = true;
+     uranus.receiveShadow = true;
     uranus.traverse((child) => {
         if (child instanceof THREE.Mesh) {
-            child.castShadow = true
-             child.receiveShadow = true
+            child.castShadow = true;
+             child.receiveShadow = true;
         }
-    })
-    scene.add(uranus)
-    assetsReady = true
-    hideLoader()
+    });
+    scene.add(uranus);
+    assetsReady = true;
+    hideLoader();
 }, undefined, () => {
-    assetsReady = true
-    hideLoader()
-})
+    assetsReady = true;
+    hideLoader();
+});
 
-const innerRadius = 1.25
-const outerRadius = 3
-const ringSegments = 128
+const innerRadius = 1.25;
+const outerRadius = 3;
+const ringSegments = 128;
 
-const ringGeometry = new THREE.RingGeometry(innerRadius, outerRadius, ringSegments)
+const ringGeometry = new THREE.RingGeometry(innerRadius, outerRadius, ringSegments);
 
-const uvs = ringGeometry.attributes.uv
-const pos = ringGeometry.attributes.position
-const v2 = new THREE.Vector2()
+const uvs = ringGeometry.attributes.uv;
+const pos = ringGeometry.attributes.position;
+const v2 = new THREE.Vector2();
 
 for (let i = 0; i < pos.count; i++) {
-    v2.fromBufferAttribute(pos, i)
-    const r = Math.sqrt(v2.x * v2.x + v2.y * v2.y)
-    const radiusT = (r - innerRadius) / (outerRadius - innerRadius)
-    const angle = Math.atan2(v2.y, v2.x)
-    const angleT = (angle + Math.PI) / (Math.PI * 2)
+    v2.fromBufferAttribute(pos, i);
+    const r = Math.sqrt(v2.x * v2.x + v2.y * v2.y);
+    const radiusT = (r - innerRadius) / (outerRadius - innerRadius);
+    const angle = Math.atan2(v2.y, v2.x);
+    const angleT = (angle + Math.PI) / (Math.PI * 2);
 
-    uvs.setXY(i, radiusT, angleT)
+    uvs.setXY(i, radiusT, angleT);
 }
-uvs.needsUpdate = true
+uvs.needsUpdate = true;
 
-const ringTexture = textureLoader.load('/textures/2k_uranus_ring_alpha.webp')
-ringTexture.colorSpace = THREE.SRGBColorSpace
+const ringTexture = textureLoader.load('/textures/2k_uranus_ring_alpha.webp');
+ringTexture.colorSpace = THREE.SRGBColorSpace;
 
 const ringMaterial = new THREE.MeshStandardMaterial({
     map: ringTexture,
@@ -99,74 +98,74 @@ const ringMaterial = new THREE.MeshStandardMaterial({
     roughness: 0.9,
     transparent: true,
     alphaTest: 0.5
-})
+});
 
-const uranusRing = new THREE.Mesh(ringGeometry, ringMaterial)
-uranusRing.name = "Uranus's Rings"
-uranusRing.rotation.x = 1.49
-uranusRing.rotation.y = 3.19
-uranusRing.castShadow = true
-uranusRing.receiveShadow = true
-scene.add(uranusRing)
+const uranusRing = new THREE.Mesh(ringGeometry, ringMaterial);
+uranusRing.name = "Uranus's Rings";
+uranusRing.rotation.x = 1.49;
+uranusRing.rotation.y = 3.19;
+uranusRing.castShadow = true;
+uranusRing.receiveShadow = true;
+scene.add(uranusRing);
 
-const totalParticles = 10000
-const particlesPerTexture = Math.floor(totalParticles / particleTextures.length)
-const excludeRadius = 7
-const particlesMeshes: THREE.Points[] = []
+const totalParticles = 10000;
+const particlesPerTexture = Math.floor(totalParticles / particleTextures.length);
+const excludeRadius = 7;
+const particlesMeshes: THREE.Points[] = [];
 
 particleTextures.forEach(texture => {
-    const particlesGeometry = new THREE.BufferGeometry()
-    const count = particlesPerTexture
+    const particlesGeometry = new THREE.BufferGeometry();
+    const count = particlesPerTexture;
     
-    const positions = new Float32Array(count * 3)
-    const colors = new Float32Array(count * 3)
-    const sizes = new Float32Array(count)
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    const sizes = new Float32Array(count);
     
     for(let i = 0; i < count; i++)
     {
-        let x = 0
-        let y = 0
-        let z = 0
-        let inExcludeZone = true
+        let x = 0;
+        let y = 0;
+        let z = 0;
+        let inExcludeZone = true;
         
         while(inExcludeZone)
         {
-            x = (Math.random() - 0.5) * 15
-            y = (Math.random() - 0.5) * 15
-            z = (Math.random() - 0.5) * 15
+            x = (Math.random() - 0.5) * 15;
+            y = (Math.random() - 0.5) * 15;
+            z = (Math.random() - 0.5) * 15;
             
-            const distance = Math.sqrt(x * x + y * y + z * z)
+            const distance = Math.sqrt(x * x + y * y + z * z);
             if(distance > excludeRadius)
             {
-                inExcludeZone = false
+                inExcludeZone = false;
             }
         }
         
-        positions[i * 3] = x
-        positions[i * 3 + 1] = y
-        positions[i * 3 + 2] = z
+        positions[i * 3] = x;
+        positions[i * 3 + 1] = y;
+        positions[i * 3 + 2] = z;
         
-        colors[i * 3] = 0.85 + Math.random() * 0.15
-        colors[i * 3 + 1] = 0.95 + Math.random() * 0.05
-        colors[i * 3 + 2] = 0.95 + Math.random() * 0.05
+        colors[i * 3] = 0.85 + Math.random() * 0.15;
+        colors[i * 3 + 1] = 0.95 + Math.random() * 0.05;
+        colors[i * 3 + 2] = 0.95 + Math.random() * 0.05;
         
-        sizes[i] = 0.05 + Math.random() * 0.1
+        sizes[i] = 0.05 + Math.random() * 0.1;
     }
     
     particlesGeometry.setAttribute(
         'position',
         new THREE.BufferAttribute(positions, 3)
-    )
+    );
     
     particlesGeometry.setAttribute(
         'color',
         new THREE.BufferAttribute(colors, 3)
-    )
+    );
     
     particlesGeometry.setAttribute(
         'size',
         new THREE.BufferAttribute(sizes, 1)
-    )
+    );
     
     const particlesMaterial = new THREE.PointsMaterial({
         color: '#ffffff',
@@ -177,68 +176,68 @@ particleTextures.forEach(texture => {
         depthWrite: false,
         vertexColors: true,
         alphaTest: 0.001
-    })
+    });
     
-    const particles = new THREE.Points(particlesGeometry, particlesMaterial)
-    scene.add(particles)
-    particlesMeshes.push(particles)
-})
+    const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particles);
+    particlesMeshes.push(particles);
+});
 
-const staticParticlesCount = 5000
+const staticParticlesCount = 5000;
 
 particleTextures.forEach(texture => {
-    const staticGeometry = new THREE.BufferGeometry()
-    const count = Math.floor(staticParticlesCount / particleTextures.length)
+    const staticGeometry = new THREE.BufferGeometry();
+    const count = Math.floor(staticParticlesCount / particleTextures.length);
     
-    const positions = new Float32Array(count * 3)
-    const colors = new Float32Array(count * 3)
-    const sizes = new Float32Array(count)
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    const sizes = new Float32Array(count);
     
     for(let i = 0; i < count; i++)
     {
-        let x = 0
-        let y = 0
-        let z = 0
-        let inValidZone = false
+        let x = 0;
+        let y = 0;
+        let z = 0;
+        let inValidZone = false;
         
         while(!inValidZone)
         {
-            x = (Math.random() - 0.5) * 40
-            y = (Math.random() - 0.5) * 40
-            z = (Math.random() - 0.5) * 40
+            x = (Math.random() - 0.5) * 40;
+            y = (Math.random() - 0.5) * 40;
+            z = (Math.random() - 0.5) * 40;
             
-            const distance = Math.sqrt(x * x + y * y + z * z)
+            const distance = Math.sqrt(x * x + y * y + z * z);
             if(distance > 10)
             {
-                inValidZone = true
+                inValidZone = true;
             }
         }
         
-        positions[i * 3] = x
-        positions[i * 3 + 1] = y
-        positions[i * 3 + 2] = z
+        positions[i * 3] = x;
+        positions[i * 3 + 1] = y;
+        positions[i * 3 + 2] = z;
         
-        colors[i * 3] = 0.85 + Math.random() * 0.15
-        colors[i * 3 + 1] = 0.95 + Math.random() * 0.05
-        colors[i * 3 + 2] = 0.95 + Math.random() * 0.05
+        colors[i * 3] = 0.85 + Math.random() * 0.15;
+        colors[i * 3 + 1] = 0.95 + Math.random() * 0.05;
+        colors[i * 3 + 2] = 0.95 + Math.random() * 0.05;
         
-        sizes[i] = 0.1 + Math.random() * 0.15
+        sizes[i] = 0.1 + Math.random() * 0.15;
     }
     
     staticGeometry.setAttribute(
         'position',
         new THREE.BufferAttribute(positions, 3)
-    )
+    );
     
     staticGeometry.setAttribute(
         'color',
         new THREE.BufferAttribute(colors, 3)
-    )
+    );
     
     staticGeometry.setAttribute(
         'size',
         new THREE.BufferAttribute(sizes, 1)
-    )
+    );
     
     const staticMaterial = new THREE.PointsMaterial({
         color: '#ffffff',
@@ -249,14 +248,14 @@ particleTextures.forEach(texture => {
         depthWrite: false,
         vertexColors: true,
         alphaTest: 0.001
-    })
+    });
     
-    const staticParticles = new THREE.Points(staticGeometry, staticMaterial)
-    scene.add(staticParticles)
-})
+    const staticParticles = new THREE.Points(staticGeometry, staticMaterial);
+    scene.add(staticParticles);
+});
 
-const atmosphereRadius = 1.01
-const atmosphereGeometry = new THREE.SphereGeometry(atmosphereRadius, 64, 64)
+const atmosphereRadius = 1.01;
+const atmosphereGeometry = new THREE.SphereGeometry(atmosphereRadius, 64, 64);
 
 const atmosphereUniforms = {
     uLightDirection: { value: new THREE.Vector3(3, 10, -10).normalize() },
@@ -265,7 +264,7 @@ const atmosphereUniforms = {
     uRimColor:       { value: new THREE.Color('#426f80') },
     uFresnelPower:   { value: 4.7 },
     uAtmosOpacity:   { value: 0.39 },
-}
+};
 
 const atmosphereMaterial = new THREE.ShaderMaterial({
     vertexShader:   atmosphereVertSrc,
@@ -275,95 +274,95 @@ const atmosphereMaterial = new THREE.ShaderMaterial({
     depthWrite:     false,
     side:           THREE.FrontSide,
     blending:       THREE.NormalBlending,
-})
+});
 
-const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial)
-atmosphereMesh.visible = true
-scene.add(atmosphereMesh)
+const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+atmosphereMesh.visible = true;
+scene.add(atmosphereMesh);
 
-const ambientLight = new THREE.AmbientLight('#ffffff', 0.01)
-scene.add(ambientLight)
+const ambientLight = new THREE.AmbientLight('#ffffff', 0.01);
+scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight('#d7f4ff', 4)
-directionalLight.position.set(3, 10, -10)
-directionalLight.castShadow = true
-directionalLight.shadow.mapSize.width = 2048
-directionalLight.shadow.mapSize.height = 2048
-directionalLight.shadow.bias = -0.001
-directionalLight.shadow.normalBias =  0.05
+const directionalLight = new THREE.DirectionalLight('#d7f4ff', 4);
+directionalLight.position.set(3, 10, -10);
+directionalLight.castShadow = true;
+directionalLight.shadow.mapSize.width = 2048;
+directionalLight.shadow.mapSize.height = 2048;
+directionalLight.shadow.bias = -0.001;
+directionalLight.shadow.normalBias =  0.05;
 
-scene.add(directionalLight)
+scene.add(directionalLight);
 
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
-}
+};
 
 window.addEventListener('resize', () => {
-    sizes.width = window.innerWidth
-    sizes.height = window.innerHeight
-    camera.aspect = sizes.width / sizes.height
-    camera.updateProjectionMatrix()
-    renderer.setSize(sizes.width, sizes.height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-})
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
 
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000)
-camera.position.z = 0
-camera.position.y = 1
-camera.position.x = 6
-camera.lookAt(0, 0, 0)
-scene.add(camera)
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000);
+camera.position.z = 0;
+camera.position.y = 1;
+camera.position.x = 6;
+camera.lookAt(0, 0, 0);
+scene.add(camera);
 
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
-renderer.setSize(sizes.width, sizes.height)
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-renderer.shadowMap.enabled = true
-renderer.shadowMap.type = THREE.PCFSoftShadowMap
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setSize(sizes.width, sizes.height);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 function ensureRendererCanvasMounted() {
-    const renderCanvas = renderer.domElement
-    renderCanvas.classList.add('webgl')
+    const renderCanvas = renderer.domElement;
+    renderCanvas.classList.add('webgl');
 
     if (!renderCanvas.isConnected) {
-        document.body.prepend(renderCanvas)
+        document.body.prepend(renderCanvas);
     }
 
-    const canvases = Array.from(document.querySelectorAll('canvas.webgl'))
+    const canvases = Array.from(document.querySelectorAll('canvas.webgl'));
     canvases.forEach((candidate) => {
         if (candidate !== renderCanvas) {
-            candidate.remove()
+            candidate.remove();
         }
-    })
+    });
 }
 
-ensureRendererCanvasMounted()
+ensureRendererCanvasMounted();
 
-gui = new GUI({ title: 'Accessibility' })
+const gui = new GUI({ title: 'Accessibility' });
 
-const PARTICLE_SPIN_SPEED = 0.0001
+const PARTICLE_SPIN_SPEED = 0.0001;
 
-const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-const reduceMotion = { enabled: reducedMotionQuery.matches }
+const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+const reduceMotion = { enabled: reducedMotionQuery.matches };
 
 const reduceMotionController = gui
     .add(reduceMotion, 'enabled')
     .name('Reduce Motion')
-    .onChange(() => applyReduceMotionState())
+    .onChange(() => applyReduceMotionState());
 
 function applyReduceMotionState() {
-    document.documentElement.classList.toggle('reduce-motion', reduceMotion.enabled)
-    reduceMotionController.updateDisplay()
-    setScrollSnapEnabled(!legalViewActive && !reduceMotion.enabled)
+    document.documentElement.classList.toggle('reduce-motion', reduceMotion.enabled);
+    reduceMotionController.updateDisplay();
+    setScrollSnapEnabled(!legalViewActive && !reduceMotion.enabled);
 }
 
 function onReducedMotionChange(event: MediaQueryListEvent) {
-    reduceMotion.enabled = event.matches
-    applyReduceMotionState()
+    reduceMotion.enabled = event.matches;
+    applyReduceMotionState();
 }
 
 if (reducedMotionQuery.addEventListener) {
-    reducedMotionQuery.addEventListener('change', onReducedMotionChange)
+    reducedMotionQuery.addEventListener('change', onReducedMotionChange);
 }
 
 const endCameraSettings = {
@@ -373,102 +372,102 @@ const endCameraSettings = {
     lookAtX: -1.6,
     lookAtY: -0.09,
     lookAtZ: -2
-}
+};
 
 function syncRouteMode() {
-    legalViewActive = isLegalRoute(window.location.pathname)
-    cameraTurnTarget = legalViewActive ? LEGAL_CAMERA_TURN_ANGLE : 0
-    gui.domElement.style.display = legalViewActive ? 'none' : ''
-    applyReduceMotionState()
+    legalViewActive = isLegalRoute(window.location.pathname);
+    cameraTurnTarget = legalViewActive ? LEGAL_CAMERA_TURN_ANGLE : 0;
+    gui.domElement.style.display = legalViewActive ? 'none' : '';
+    applyReduceMotionState();
 }
 
-syncRouteMode()
+syncRouteMode();
 
-const initialCameraX = 6
-const initialCameraY = 2
-const initialCameraZ = 0
-const lookAtTarget = new THREE.Vector3()
-const turnedLookAtTarget = new THREE.Vector3()
-const viewDirection = new THREE.Vector3()
-const upAxis = new THREE.Vector3(0, 1, 0)
+const initialCameraX = 6;
+const initialCameraY = 2;
+const initialCameraZ = 0;
+const lookAtTarget = new THREE.Vector3();
+const turnedLookAtTarget = new THREE.Vector3();
+const viewDirection = new THREE.Vector3();
+const upAxis = new THREE.Vector3(0, 1, 0);
 
 const tick = () => {
-    const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
-    const scrollHeight = document.body.scrollHeight - window.innerHeight
-    const scrollProgress = legalViewActive ? 0 : (scrollHeight > 0 ? scrollY / scrollHeight : 0)
+    const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollHeight = document.body.scrollHeight - window.innerHeight;
+    const scrollProgress = legalViewActive ? 0 : (scrollHeight > 0 ? scrollY / scrollHeight : 0);
 
-    const baseCameraX = initialCameraX + (endCameraSettings.x - initialCameraX) * scrollProgress
-    const baseCameraY = initialCameraY + (endCameraSettings.y - initialCameraY) * scrollProgress
-    const baseCameraZ = initialCameraZ + (endCameraSettings.z - initialCameraZ) * scrollProgress
+    const baseCameraX = initialCameraX + (endCameraSettings.x - initialCameraX) * scrollProgress;
+    const baseCameraY = initialCameraY + (endCameraSettings.y - initialCameraY) * scrollProgress;
+    const baseCameraZ = initialCameraZ + (endCameraSettings.z - initialCameraZ) * scrollProgress;
 
-    camera.position.x = baseCameraX
-    camera.position.y = baseCameraY
-    camera.position.z = baseCameraZ
+    camera.position.x = baseCameraX;
+    camera.position.y = baseCameraY;
+    camera.position.z = baseCameraZ;
     
-    const lookAtX = 0 + (endCameraSettings.lookAtX - 0) * scrollProgress
-    const lookAtY = 0 + (endCameraSettings.lookAtY - 0) * scrollProgress
-    const lookAtZ = 0 + (endCameraSettings.lookAtZ - 0) * scrollProgress
+    const lookAtX = 0 + (endCameraSettings.lookAtX - 0) * scrollProgress;
+    const lookAtY = 0 + (endCameraSettings.lookAtY - 0) * scrollProgress;
+    const lookAtZ = 0 + (endCameraSettings.lookAtZ - 0) * scrollProgress;
 
-    cameraTurnCurrent += (cameraTurnTarget - cameraTurnCurrent) * 0.06
+    cameraTurnCurrent += (cameraTurnTarget - cameraTurnCurrent) * 0.06;
 
-    lookAtTarget.set(lookAtX, lookAtY, lookAtZ)
-    viewDirection.copy(lookAtTarget).sub(camera.position).normalize()
-    viewDirection.applyAxisAngle(upAxis, cameraTurnCurrent)
-    turnedLookAtTarget.copy(camera.position).add(viewDirection)
-    camera.lookAt(turnedLookAtTarget)
+    lookAtTarget.set(lookAtX, lookAtY, lookAtZ);
+    viewDirection.copy(lookAtTarget).sub(camera.position).normalize();
+    viewDirection.applyAxisAngle(upAxis, cameraTurnCurrent);
+    turnedLookAtTarget.copy(camera.position).add(viewDirection);
+    camera.lookAt(turnedLookAtTarget);
 
     if (uranus && !reduceMotion.enabled) {
-        uranus.rotation.y = 3 + (0 - 3) * scrollProgress
+        uranus.rotation.y = 3 + (0 - 3) * scrollProgress;
     }
 
     if (!reduceMotion.enabled) {
         particlesMeshes.forEach(particles => {
-            particles.rotation.y -= PARTICLE_SPIN_SPEED
-        })
+            particles.rotation.y -= PARTICLE_SPIN_SPEED;
+        });
     }
 
     atmosphereUniforms.uLightDirection.value
         .copy(directionalLight.position)
-        .normalize()
+        .normalize();
 
-    renderer.render(scene, camera)
-    window.requestAnimationFrame(tick)
-}
+    renderer.render(scene, camera);
+    window.requestAnimationFrame(tick);
+};
 
-tick()
+tick();
 
 function scrollToNextSection() {
-    const sections = document.querySelectorAll('section')
-    const currentScroll = window.scrollY + window.innerHeight / 2
+    const sections = document.querySelectorAll('section');
+    const currentScroll = window.scrollY + window.innerHeight / 2;
 
     for (let i = 0; i < sections.length; i++) {
-        const section = sections[i] as HTMLElement
+        const section = sections[i] as HTMLElement;
         if (section.offsetTop > currentScroll) {
-            const behavior: ScrollBehavior = reduceMotion.enabled ? 'auto' : 'smooth'
-            section.scrollIntoView({ behavior, block: 'start' })
-            break
+            const behavior: ScrollBehavior = reduceMotion.enabled ? 'auto' : 'smooth';
+            section.scrollIntoView({ behavior, block: 'start' });
+            break;
         }
     }
 }
 
 function syncRouteDom() {
-    const downArrow = document.querySelector('.down-arrow') as HTMLElement | null
+    const downArrow = document.querySelector('.down-arrow') as HTMLElement | null;
 
     if (downArrow) {
-        downArrow.onclick = legalViewActive ? null : scrollToNextSection
-        downArrow.style.display = legalViewActive ? 'none' : ''
+        downArrow.onclick = legalViewActive ? null : scrollToNextSection;
+        downArrow.style.display = legalViewActive ? 'none' : '';
     }
 
-    applyReduceMotionState()
+    applyReduceMotionState();
 }
 
-syncRouteDom()
+syncRouteDom();
 
 document.addEventListener('astro:page-load', () => {
-    ensureRendererCanvasMounted()
-    syncRouteMode()
-    syncRouteDom()
+    ensureRendererCanvasMounted();
+    syncRouteMode();
+    syncRouteDom();
     if (assetsReady) {
-        hideLoader()
+        hideLoader();
     }
-})
+});
