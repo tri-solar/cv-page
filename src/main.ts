@@ -22,17 +22,10 @@ function getOrCreateCanvas(): HTMLCanvasElement {
     return createdCanvas
 }
 
-/**
- * Canvas
- */
 const canvas = getOrCreateCanvas()
 
-/**
- * Scene
- */
 const scene = new THREE.Scene()
 
-//textures
 const textureLoader = new THREE.TextureLoader()
 const uranusColor = textureLoader.load('/textures/uranus-color-tuned.webp')
 uranusColor.colorSpace = THREE.SRGBColorSpace
@@ -43,9 +36,6 @@ const particleTextures = [
     textureLoader.load('/textures/particles/star3.png')
 ]
 
-/**
- * Geometry & Material
- */
 let uranus: THREE.Group
 let gui: GUI
 
@@ -62,18 +52,8 @@ gltfLoader.load('/models/uranus-improved.glb', (gltf) => {
         }
     })
     scene.add(uranus)
-    
-    if (gui) {
-        const uranusFolder = gui.addFolder('Uranus')
-        uranusFolder.add(uranus.rotation, 'x', 0, Math.PI * 2, 0.01).name('Rotation X')
-        uranusFolder.add(uranus.rotation, 'y', 0, Math.PI * 2, 0.01).name('Rotation Y')
-        uranusFolder.add(uranus.rotation, 'z', 0, Math.PI * 2, 0.01).name('Rotation Z')
-    }
 })
 
-/**
- * Uranus Rings
- */
 const innerRadius = 1.25
 const outerRadius = 3
 const ringSegments = 128
@@ -115,9 +95,6 @@ uranusRing.castShadow = true
 uranusRing.receiveShadow = true
 scene.add(uranusRing)
 
-/**
- * Particles
- */
 const totalParticles = 10000
 const particlesPerTexture = Math.floor(totalParticles / particleTextures.length)
 const excludeRadius = 7
@@ -155,9 +132,9 @@ particleTextures.forEach(texture => {
         positions[i * 3 + 1] = y
         positions[i * 3 + 2] = z
         
-        colors[i * 3] = 0.85 + Math.random() * 0.15     // Red
-        colors[i * 3 + 1] = 0.95 + Math.random() * 0.05  // Green
-        colors[i * 3 + 2] = 0.95 + Math.random() * 0.05  // Blue
+        colors[i * 3] = 0.85 + Math.random() * 0.15
+        colors[i * 3 + 1] = 0.95 + Math.random() * 0.05
+        colors[i * 3 + 2] = 0.95 + Math.random() * 0.05
         
         sizes[i] = 0.05 + Math.random() * 0.1
     }
@@ -193,9 +170,6 @@ particleTextures.forEach(texture => {
     particlesMeshes.push(particles)
 })
 
-/**
- * Static Particles (Further Out)
- */
 const staticParticlesCount = 5000
 
 particleTextures.forEach(texture => {
@@ -230,9 +204,9 @@ particleTextures.forEach(texture => {
         positions[i * 3 + 1] = y
         positions[i * 3 + 2] = z
         
-        colors[i * 3] = 0.85 + Math.random() * 0.15     // Red
-        colors[i * 3 + 1] = 0.95 + Math.random() * 0.05  // Green
-        colors[i * 3 + 2] = 0.95 + Math.random() * 0.05  // Blue
+        colors[i * 3] = 0.85 + Math.random() * 0.15
+        colors[i * 3 + 1] = 0.95 + Math.random() * 0.05
+        colors[i * 3 + 2] = 0.95 + Math.random() * 0.05
         
         sizes[i] = 0.1 + Math.random() * 0.15
     }
@@ -267,19 +241,16 @@ particleTextures.forEach(texture => {
     scene.add(staticParticles)
 })
 
-/**
- * Uranus Atmosphere
- */
-const atmosphereRadius = 1.01  // slightly larger than the planet (~1.0)
+const atmosphereRadius = 1.01
 const atmosphereGeometry = new THREE.SphereGeometry(atmosphereRadius, 64, 64)
 
 const atmosphereUniforms = {
     uLightDirection: { value: new THREE.Vector3(3, 10, -10).normalize() },
-    uDaySideColor:   { value: new THREE.Color('#a8e6ff') },  // icy cyan-blue (lit)
-    uNightSideColor: { value: new THREE.Color('#1a3a5c') },  // deep navy (dark)
-    uRimColor:       { value: new THREE.Color('#c8f0ff') },  // bright white-blue rim
-    uFresnelPower:   { value: 3.5 },
-    uAtmosOpacity:   { value: 0.55 },
+    uDaySideColor:   { value: new THREE.Color('#a8e6ff') },
+    uNightSideColor: { value: new THREE.Color('#000000') },
+    uRimColor:       { value: new THREE.Color('#426f80') },
+    uFresnelPower:   { value: 4.7 },
+    uAtmosOpacity:   { value: 0.39 },
 }
 
 const atmosphereMaterial = new THREE.ShaderMaterial({
@@ -293,12 +264,9 @@ const atmosphereMaterial = new THREE.ShaderMaterial({
 })
 
 const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial)
-atmosphereMesh.visible = false
+atmosphereMesh.visible = true
 scene.add(atmosphereMesh)
 
-/**
- * Lights
- */
 const ambientLight = new THREE.AmbientLight('#ffffff', 0.01)
 scene.add(ambientLight)
 
@@ -312,20 +280,6 @@ directionalLight.shadow.normalBias =  0.05
 
 scene.add(directionalLight)
 
-/**
- * Light Helpers
- */
-const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.5)
-directionalLightHelper.visible = false
-scene.add(directionalLightHelper)
-
-const gridHelper = new THREE.GridHelper(10, 10)
-gridHelper.visible = false
-scene.add(gridHelper)
-
-/**
- * Sizes
- */
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
@@ -340,9 +294,6 @@ window.addEventListener('resize', () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-/**
- * Camera
- */
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000)
 camera.position.z = 0
 camera.position.y = 1
@@ -350,9 +301,6 @@ camera.position.x = 6
 camera.lookAt(0, 0, 0)
 scene.add(camera)
 
-/**
- * Renderer
- */
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -377,66 +325,51 @@ function ensureRendererCanvasMounted() {
 
 ensureRendererCanvasMounted()
 
-/**
- * GUI
- */
-gui = new GUI()
+gui = new GUI({ title: 'Accessibility' })
 
-const lightsFolder = gui.addFolder('Lights')
-lightsFolder.add(ambientLight, 'intensity', 0, 1, 0.01).name('Ambient Light')
-lightsFolder.add(directionalLight, 'intensity', 0, 10, 0.01).name('Directional Light')
-lightsFolder.add(directionalLight.position, 'x', -10, 10, 0.1).name('Dir Light X')
-lightsFolder.add(directionalLight.position, 'y', -10, 10, 0.1).name('Dir Light Y')
-lightsFolder.add(directionalLight.position, 'z', -10, 10, 0.1).name('Dir Light Z')
+const PARTICLE_SPIN_SPEED = 0.0001
 
-const helpersFolder = gui.addFolder('Helpers')
-helpersFolder.add(directionalLightHelper, 'visible').name('Directional Helper')
-helpersFolder.add(gridHelper, 'visible').name('Grid Helper')
+const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+const reduceMotion = { enabled: reducedMotionQuery.matches }
 
-const ringFolder = gui.addFolder('Ring')
-ringFolder.add(uranusRing.rotation, 'x', 0, Math.PI * 2, 0.01).name('Rotation X')
-ringFolder.add(uranusRing.rotation, 'y', 0, Math.PI * 2, 0.01).name('Rotation Y')
-ringFolder.add(uranusRing.rotation, 'z', 0, Math.PI * 2, 0.01).name('Rotation Z')
+const reduceMotionController = gui
+    .add(reduceMotion, 'enabled')
+    .name('Reduce Motion')
+    .onChange(() => applyReduceMotionState())
 
-const animationSettings = { animSpeed: 0.0001, rotateOnScroll: true }
-const animationFolder = gui.addFolder('Animation')
-animationFolder.add(animationSettings, 'animSpeed', 0, 0.001, 0.00001).name('Particles Speed')
-animationFolder.add(animationSettings, 'rotateOnScroll').name('Rotate on Scroll')
+function applyReduceMotionState() {
+    document.documentElement.classList.toggle('reduce-motion', reduceMotion.enabled)
+    reduceMotionController.updateDisplay()
+    setScrollSnapEnabled(!legalViewActive && !reduceMotion.enabled)
+}
 
-const atmosFolder = gui.addFolder('Atmosphere')
-atmosFolder.add(atmosphereUniforms.uFresnelPower, 'value', 1, 8, 0.1).name('Fresnel Power')
-atmosFolder.add(atmosphereUniforms.uAtmosOpacity, 'value', 0, 1, 0.01).name('Opacity')
-atmosFolder.addColor({ color: '#a8e6ff' }, 'color')
-    .name('Day Side Color')
-    .onChange((v: string) => atmosphereUniforms.uDaySideColor.value.set(v))
-atmosFolder.addColor({ color: '#1a3a5c' }, 'color')
-    .name('Night Side Color')
-    .onChange((v: string) => atmosphereUniforms.uNightSideColor.value.set(v))
-atmosFolder.addColor({ color: '#c8f0ff' }, 'color')
-    .name('Rim Color')
-    .onChange((v: string) => atmosphereUniforms.uRimColor.value.set(v))
-atmosFolder.add(atmosphereMesh, 'visible').name('Visible')
+function onReducedMotionChange(event: MediaQueryListEvent) {
+    reduceMotion.enabled = event.matches
+    applyReduceMotionState()
+}
 
-const endCameraSettings = { x: 2.1, y: 0.9, z: -0.09, lookAtX: -1.6, lookAtY: -0.09, lookAtZ: -2 }
-const cameraFolder = gui.addFolder('End Camera')
-cameraFolder.add(endCameraSettings, 'x', -10, 10, 0.1).name('Position X')
-cameraFolder.add(endCameraSettings, 'y', -10, 10, 0.1).name('Position Y')
-cameraFolder.add(endCameraSettings, 'z', -10, 10, 0.1).name('Position Z')
-cameraFolder.add(endCameraSettings, 'lookAtX', -10, 10, 0.1).name('LookAt X')
-cameraFolder.add(endCameraSettings, 'lookAtY', -10, 10, 0.1).name('LookAt Y')
-cameraFolder.add(endCameraSettings, 'lookAtZ', -10, 10, 0.1).name('LookAt Z')
+if (reducedMotionQuery.addEventListener) {
+    reducedMotionQuery.addEventListener('change', onReducedMotionChange)
+}
+
+const endCameraSettings = {
+    x: 2.1,
+    y: 0.9,
+    z: -0.09,
+    lookAtX: -1.6,
+    lookAtY: -0.09,
+    lookAtZ: -2
+}
 
 function syncRouteMode() {
     legalViewActive = isLegalRoute(window.location.pathname)
     cameraTurnTarget = legalViewActive ? LEGAL_CAMERA_TURN_ANGLE : 0
     gui.domElement.style.display = legalViewActive ? 'none' : ''
+    applyReduceMotionState()
 }
 
 syncRouteMode()
 
-/**
- * Camera Zoom on Scroll
- */
 const initialCameraX = 6
 const initialCameraY = 2
 const initialCameraZ = 0
@@ -445,9 +378,6 @@ const turnedLookAtTarget = new THREE.Vector3()
 const viewDirection = new THREE.Vector3()
 const upAxis = new THREE.Vector3(0, 1, 0)
 
-/**
- * Animate
- */
 const tick = () => {
     const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
     const scrollHeight = document.body.scrollHeight - window.innerHeight
@@ -472,18 +402,17 @@ const tick = () => {
     viewDirection.applyAxisAngle(upAxis, cameraTurnCurrent)
     turnedLookAtTarget.copy(camera.position).add(viewDirection)
     camera.lookAt(turnedLookAtTarget)
-    
-    // Animate Uranus rotation
-    if (uranus && animationSettings.rotateOnScroll) {
+
+    if (uranus && !reduceMotion.enabled) {
         uranus.rotation.y = 3 + (0 - 3) * scrollProgress
     }
-    
-    // Rotate particles to the left
-    particlesMeshes.forEach(particles => {
-        particles.rotation.y -= animationSettings.animSpeed
-    })
-    
-    // Update atmosphere uniforms
+
+    if (!reduceMotion.enabled) {
+        particlesMeshes.forEach(particles => {
+            particles.rotation.y -= PARTICLE_SPIN_SPEED
+        })
+    }
+
     atmosphereUniforms.uLightDirection.value
         .copy(directionalLight.position)
         .normalize()
@@ -494,9 +423,6 @@ const tick = () => {
 
 tick()
 
-/**
- * Scroll Navigation
- */
 function scrollToNextSection() {
     const sections = document.querySelectorAll('section')
     const currentScroll = window.scrollY + window.innerHeight / 2
@@ -504,7 +430,8 @@ function scrollToNextSection() {
     for (let i = 0; i < sections.length; i++) {
         const section = sections[i] as HTMLElement
         if (section.offsetTop > currentScroll) {
-            section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            const behavior: ScrollBehavior = reduceMotion.enabled ? 'auto' : 'smooth'
+            section.scrollIntoView({ behavior, block: 'start' })
             break
         }
     }
@@ -518,7 +445,7 @@ function syncRouteDom() {
         downArrow.style.display = legalViewActive ? 'none' : ''
     }
 
-    setScrollSnapEnabled(!legalViewActive)
+    applyReduceMotionState()
 }
 
 syncRouteDom()

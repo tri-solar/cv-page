@@ -3,58 +3,58 @@
 @-webkit-keyframes shake-vertical {
   0%,
   100% {
-    -webkit-transform: translateY(0);
-            transform: translateY(0);
+    -webkit-transform: translate(-50%, 0);
+            transform: translate(-50%, 0);
   }
   10%,
   30%,
   50%,
   70% {
-    -webkit-transform: translateY(-4px);
-            transform: translateY(-4px);
+    -webkit-transform: translate(-50%, -4px);
+            transform: translate(-50%, -4px);
   }
   20%,
   40%,
   60% {
-    -webkit-transform: translateY(4px);
-            transform: translateY(4px);
+    -webkit-transform: translate(-50%, 4px);
+            transform: translate(-50%, 4px);
   }
   80% {
-    -webkit-transform: translateY(3.2px);
-            transform: translateY(3.2px);
+    -webkit-transform: translate(-50%, 3.2px);
+            transform: translate(-50%, 3.2px);
   }
   90% {
-    -webkit-transform: translateY(-3.2px);
-            transform: translateY(-3.2px);
+    -webkit-transform: translate(-50%, -3.2px);
+            transform: translate(-50%, -3.2px);
   }
 }
 
 @keyframes shake-vertical {
   0%,
   100% {
-    -webkit-transform: translateY(0);
-            transform: translateY(0);
+    -webkit-transform: translate(-50%, 0);
+            transform: translate(-50%, 0);
   }
   10%,
   30%,
   50%,
   70% {
-    -webkit-transform: translateY(-4px);
-            transform: translateY(-4px);
+    -webkit-transform: translate(-50%, -4px);
+            transform: translate(-50%, -4px);
   }
   20%,
   40%,
   60% {
-    -webkit-transform: translateY(4px);
-            transform: translateY(4px);
+    -webkit-transform: translate(-50%, 4px);
+            transform: translate(-50%, 4px);
   }
   80% {
-    -webkit-transform: translateY(3.2px);
-            transform: translateY(3.2px);
+    -webkit-transform: translate(-50%, 3.2px);
+            transform: translate(-50%, 3.2px);
   }
   90% {
-    -webkit-transform: translateY(-3.2px);
-            transform: translateY(-3.2px);
+    -webkit-transform: translate(-50%, -3.2px);
+            transform: translate(-50%, -3.2px);
   }
 }
 

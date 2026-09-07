@@ -122,9 +122,6 @@ section {
 .right {
     top: 20%;
     left: 55%;
-    /*background: rgba(0, 0, 0, 0.33);
-    backdrop-filter: blur(8px);
-    border-radius: 12px;*/
 }
 
 .subheader  {
@@ -205,4 +202,45 @@ section {
 
 .legal-links span {
     color: var(--tone-accent-muted);
+}
+
+html.reduce-motion {
+    scroll-snap-type: none;
+}
+
+html.reduce-motion .down-arrow {
+    -webkit-animation: none;
+    animation: none;
+}
+
+html.reduce-motion ::view-transition-group(*),
+html.reduce-motion ::view-transition-old(*),
+html.reduce-motion ::view-transition-new(*) {
+    animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-snap-type: none;
+    }
+
+    .down-arrow {
+        -webkit-animation: none;
+        animation: none;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none !important;
+    }
 }

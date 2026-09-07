@@ -152,55 +152,65 @@ import favicon from '../planet-outline-svgrepo-com.png'
     </script>
 
     <script>
-      const sectionLinks = Array.from(document.querySelectorAll('.section-link'))
-      const sections = sectionLinks
-        .map((link) => {
-          const hash = link.getAttribute('href')
-          return hash ? document.querySelector(hash) : null
-        })
-        .filter((section) => section instanceof HTMLElement)
+      let cleanupSectionIndicator: (() => void) | undefined
 
-      function setActiveSection(id: string) {
-        for (const link of sectionLinks) {
-          const isActive = link.getAttribute('href') === `#${id}`
-          link.classList.toggle('is-active', isActive)
-          if (isActive) {
-            link.setAttribute('aria-current', 'location')
-          } else {
-            link.removeAttribute('aria-current')
-          }
-        }
-      }
+      function setupSectionIndicator() {
+        cleanupSectionIndicator?.()
 
-      function updateActiveFromScroll() {
-        if (!sections.length) {
+        const sectionLinks = Array.from(document.querySelectorAll('.section-link'))
+        const sections = sectionLinks
+          .map((link) => {
+            const hash = link.getAttribute('href')
+            return hash ? document.querySelector(hash) : null
+          })
+          .filter((section): section is HTMLElement => section instanceof HTMLElement)
+
+        if (!sectionLinks.length || !sections.length) {
+          cleanupSectionIndicator = undefined
           return
         }
 
-        const markerY = window.scrollY + 180
-        let currentSection = sections[0]
-
-        for (const section of sections) {
-          if (!(section instanceof HTMLElement)) {
-            continue
-          }
-
-          if (section.offsetTop <= markerY) {
-            currentSection = section
-          } else {
-            break
+        function setActiveSection(id: string) {
+          for (const link of sectionLinks) {
+            const isActive = link.getAttribute('href') === `#${id}`
+            link.classList.toggle('is-active', isActive)
+            if (isActive) {
+              link.setAttribute('aria-current', 'location')
+            } else {
+              link.removeAttribute('aria-current')
+            }
           }
         }
 
-        if (currentSection instanceof HTMLElement) {
+        function updateActiveFromScroll() {
+          const markerY = window.scrollY + 180
+          let currentSection = sections[0]
+
+          for (const section of sections) {
+            if (section.offsetTop <= markerY) {
+              currentSection = section
+            } else {
+              break
+            }
+          }
+
           setActiveSection(currentSection.id)
+        }
+
+        updateActiveFromScroll()
+        window.addEventListener('scroll', updateActiveFromScroll, { passive: true })
+        window.addEventListener('resize', updateActiveFromScroll)
+        window.addEventListener('hashchange', updateActiveFromScroll)
+
+        cleanupSectionIndicator = () => {
+          window.removeEventListener('scroll', updateActiveFromScroll)
+          window.removeEventListener('resize', updateActiveFromScroll)
+          window.removeEventListener('hashchange', updateActiveFromScroll)
         }
       }
 
-      updateActiveFromScroll()
-      window.addEventListener('scroll', updateActiveFromScroll, { passive: true })
-      window.addEventListener('resize', updateActiveFromScroll)
-      window.addEventListener('hashchange', updateActiveFromScroll)
+      setupSectionIndicator()
+      document.addEventListener('astro:page-load', setupSectionIndicator)
     </script>
   </body>
 </html>
