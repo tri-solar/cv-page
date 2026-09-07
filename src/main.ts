@@ -340,6 +340,9 @@ ensureRendererCanvasMounted();
 
 const gui = new GUI({ title: 'Accessibility' });
 
+const guiStyleSheet = Array.from(document.head.querySelectorAll('style'))
+    .find((style) => style.textContent && style.textContent.includes('lil-gui'));
+
 const PARTICLE_SPIN_SPEED = 0.0001;
 
 const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -377,7 +380,17 @@ const endCameraSettings = {
 function syncRouteMode() {
     legalViewActive = isLegalRoute(window.location.pathname);
     cameraTurnTarget = legalViewActive ? LEGAL_CAMERA_TURN_ANGLE : 0;
-    gui.domElement.style.display = legalViewActive ? 'none' : '';
+    if (legalViewActive) {
+        gui.domElement.style.display = 'none';
+    } else {
+        if (guiStyleSheet && !guiStyleSheet.isConnected) {
+            document.head.appendChild(guiStyleSheet);
+        }
+        if (!gui.domElement.isConnected) {
+            document.body.appendChild(gui.domElement);
+        }
+        gui.domElement.style.display = '';
+    }
     applyReduceMotionState();
 }
 

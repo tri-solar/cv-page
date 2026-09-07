@@ -284,3 +284,103 @@ html.reduce-motion ::view-transition-new(*) {
     letter-spacing: 0.2em;
     color: var(--tone-accent);
 }
+
+@media (max-width: 760px) {
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-snap-type: none;
+        overflow: visible;
+    }
+
+    body {
+        height: auto;
+        overflow: visible;
+    }
+
+    section {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+        scroll-snap-align: none;
+        scroll-snap-stop: normal;
+    }
+
+    .hero {
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 84px 0 96px;
+    }
+
+    .sections-wrapper,
+    .content {
+        overflow: visible;
+    }
+
+    .content {
+        position: static;
+        top: auto;
+        left: auto;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 24px;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+    }
+
+    .content.left {
+        top: auto;
+        left: auto;
+    }
+
+    .content.right,
+    .content.large-left {
+        top: auto;
+        left: auto;
+    }
+
+    .content h1 {
+        font-size: 2.05rem;
+    }
+
+    .content .subheader {
+        font-size: 1.3rem;
+        margin-bottom: 14px;
+    }
+
+    .content p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .about {
+        font-size: 0.95rem;
+        line-height: 1.55;
+    }
+
+    .content-section {
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 28px;
+        padding: 56px 0 64px;
+    }
+
+    .stack {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .category {
+        flex: 1 1 45%;
+        margin-right: 0;
+    }
+
+    .skill-card {
+        justify-content: flex-start;
+    }
+}
