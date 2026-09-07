@@ -13,6 +13,13 @@ import favicon from '../planet-outline-svgrepo-com.png'
     <ClientRouter />
   </head>
   <body>
+    <div class="loader" id="loader" role="status" aria-label="Loading assets">
+      <svg class="loader-spinner" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="9" opacity="0.2"></circle>
+        <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+      </svg>
+      <p class="loader-text">Loading assets...</p>
+    </div>
     <canvas class="webgl" transition:persist></canvas>
     <div class="sections-wrapper">
       <section class="hero">

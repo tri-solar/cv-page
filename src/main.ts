@@ -38,6 +38,15 @@ const particleTextures = [
 
 let uranus: THREE.Group
 let gui: GUI
+let assetsReady = false
+
+function hideLoader() {
+    const loader = document.getElementById('loader')
+    if (loader) {
+        loader.classList.add('loader--done')
+        setTimeout(() => loader.remove(), 500)
+    }
+}
 
 const gltfLoader = new GLTFLoader()
 gltfLoader.load('/models/uranus-improved.glb', (gltf) => {
@@ -52,6 +61,11 @@ gltfLoader.load('/models/uranus-improved.glb', (gltf) => {
         }
     })
     scene.add(uranus)
+    assetsReady = true
+    hideLoader()
+}, undefined, () => {
+    assetsReady = true
+    hideLoader()
 })
 
 const innerRadius = 1.25
@@ -454,4 +468,7 @@ document.addEventListener('astro:page-load', () => {
     ensureRendererCanvasMounted()
     syncRouteMode()
     syncRouteDom()
+    if (assetsReady) {
+        hideLoader()
+    }
 })
